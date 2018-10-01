@@ -1,0 +1,480 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+@Scripts.Render("~/bundles/calculator")
+
+
+<ul class="nav nav-tabs">
+    <li class="active">
+        <a data-toggle="tab" href="#calc_actual">Actual</a>
+    </li>
+    <li>
+        <a data-toggle="tab" href="#calc_proyeccion">Proyección</a>
+    </li>
+</ul>
+
+<div class="tab-content">
+    <!-- Tab Cálculo actual-->
+    <div id="calc_actual" class="tab-pane fade in active">
+        <div class="row tab-upper-margin">
+            <!-- Ingresos -->
+            <div class="panel panel-default" style="margin: 0px 15px 0px 15px;">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ingresos</h3>
+                </div>
+
+                <div class="panel-body">
+                    @using (Html.BeginForm("calculoActual", "Calculator", FormMethod.Post, new { id = "formCalculoActual" }))
+                    {
+                    <div class="row">
+                        <div class="col-md-3">
+
+                            <label for="sel_especie"
+                                   style="display: block">
+                                Especie
+                                <img src="~/Content/images/help.png"
+                                     class="icon-help pull-right"
+                                     data-toggle="tooltip"
+                                     data-placement="top"
+                                     title="Especie de árbol" />
+                            </label>
+                            <select id="sel_especie"
+                                    name="especie"
+                                    class="form-control big-input-size"></select>
+
+                        </div>
+
+                        <!--Ingreso DAP-->
+                        <div class="col-md-3">
+
+                            <label for="#txtDAP"
+                                   style="display: block">
+                                DAP (cm)
+                                <img src="~/Content/images/help.png"
+                                     class="icon-help pull-right"
+                                     data-toggle="tooltip"
+                                     data-placement="top"
+                                     title="Diámetro de altura al pecho" />
+                            </label>
+                            <input id="txtDAP"
+                                   name="dap"
+                                   type="number"
+                                   class="form-control big-input-size"
+                                   placeholder="15 cm"
+                                   min="0"
+                                   step="any"
+                                   autocomplete="off"
+                                   oninvalid="this.setCustomValidity('Ingresar un DAP válido')"
+                                   oninput="setCustomValidity('')" required>
+
+                        </div>
+
+                        <!--Ingreso densidad número de arboles por hectarea-->
+                        <div class="col-md-3">
+
+                            <label for="txtNumero" style="display: block;">
+                                Densidad (No. árboles/ha)
+                                <img src="~/Content/images/help.png"
+                                     class="icon-help pull-right"
+                                     data-toggle="tooltip"
+                                     data-placement="top"
+                                     title="Cantidad de árboles a tomar en cuenta" />
+                            </label>
+                            <input id="txtNumero"
+                                   name="numArboles"
+                                   type="number"
+                                   class="form-control big-input-size"
+                                   placeholder="1111"
+                                   min="0"
+                                   step="1"
+                                   autocomplete="off"
+                                   oninvalid="this.setCustomValidity('Ingresar un número válido')"
+                                   oninput="setCustomValidity('')" required>
+
+                        </div>
+
+                        <!--Ingreso de la altura total promedio-->
+                        <div class="col-md-3">
+
+                            <label for="txtAltura" s
+                                   tyle="display:block">
+                                Altura total promedio (m)
+                                <img src="~/Content/images/help.png"
+                                     class="icon-help pull-right"
+                                     data-toggle="tooltip" data-placement="top"
+                                     title="Altura promedio de los árboles" />
+                            </label>
+                            <input id="txtAltura"
+                                   name="altura"
+                                   type="number"
+                                   class="form-control big-input-size"
+                                   placeholder="10 m"
+                                   min="0"
+                                   step="any"
+                                   autocomplete="off"
+                                   oninvalid="this.setCustomValidity('Ingresar una altura válido')"
+                                   oninput="setCustomValidity('')" required>
+                        </div>
+
+                    </div>
+
+                    <!--Bontones de calcular y reiniciar.-->
+                    <div class="row calcular-button">
+
+                        <button id="btnSubmitActual" 
+                                type="submit" 
+                                class="btn btn-primary" 
+                                data-post-url="@Url.Action("calculoActual", "Calculator")">
+                            Calcular
+                        </button>
+                        <button id="btnResetFormActual" 
+                                type="reset" 
+                                class="btn btn-danger">
+                            Reiniciar
+                        </button>
+
+                    </div>
+                    }
+                </div>
+            </div>
+            <!-- /Ingresos -->
+        </div>
+
+        <!-- Resultado -->
+        <div id="panelResultadoActual" 
+             class="row tab-upper-margin" 
+             style="margin:20px 0px 0px 0px" hidden>
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Resultado</h3>
+                </div>
+
+                <div class="panel-body">
+
+                    <b>Resultado: </b> 
+                    <label id="lblResultado" 
+                           style="font-weight:normal">
+                        10 tulis
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                Si desea ver cómo se realizó este cálculo, hacer click 
+                <a href="@Url.Action("Index", "Calculator/about")" class="alert-link"> aquí </a>
+            </div>
+        </div>
+        <!-- /Resultado -->
+
+    </div>
+    <!-- /Tab Cálculo actual-->
+    <!-- Tab Cálculo proyectado-->
+    <div id="calc_proyeccion" 
+         class="tab-pane fade" 
+         data-url="@Url.Action("getIndices", "Calculator")">
+
+        <!-- Ingresos -->
+        <div class="row tab-upper-margin">
+            <div class="panel panel-default" 
+                 style="margin: 0px 15px 0px 15px;">
+
+                <div class="panel-heading">
+                    <h3 class="panel-title">Ingresos</h3>
+                </div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("calculoProyectado", "Calculator", FormMethod.Post, new { id = "formCalculoProyectado" }))
+                    {
+                        <div class="row">
+
+                            <div class="col-md-3">
+                                <label for="sel_especieP" 
+                                       style="display:block;">
+                                    Especie
+                                    <img src="~/Content/images/help.png" 
+                                         class="icon-help pull-right"
+                                         data-toggle="tooltip" 
+                                         data-placement="top"
+                                         title="Especie del árbol" />
+                                </label>
+                                <select id="sel_especieP" 
+                                        name="especie" 
+                                        class="form-control big-input-size">
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <label for="sel_sitio" 
+                                       style="display: block">
+                                    Índice de sitio
+                                    <img src="~/Content/images/help.png" 
+                                         class="icon-help pull-right" 
+                                         data-toggle="tooltip" 
+                                         data-placement="top"
+                                         title="Expresión cuantitativa de la calidad de sitio " />
+                                </label>
+                                <select id="sel_sitio" 
+                                        name="indice_sitio"
+                                        class="form-control big-input-size">
+                                </select>
+
+                            </div>
+
+                            <div class="col-md-2">
+
+                                <label for="txtYearsP" 
+                                       style="display:block">
+                                    Años de proyección
+                                    <img src="~/Content/images/help.png" 
+                                         class="icon-help pull-right" 
+                                         data-toggle="tooltip"
+                                         data-placement="top"
+                                         title="Número de años a proyectar" />
+                                </label>
+                                <input id="txtYearsP" 
+                                       name="ms"
+                                       type="number"
+                                       class="form-control big-input-size"
+                                       placeholder="5 años" 
+                                       min="0" 
+                                       step="1"
+                                       autocomplete="off"
+                                       oninvalid="this.setCustomValidity('Ingresar cantidad de años válida')"
+                                       oninput="setCustomValidity('')" required>
+
+                            </div>
+
+                            <div class="col-md-5" 
+                                 style="display: flex;">
+
+                                <div style="width: 50%; margin-right: 10px;">
+
+                                    <label for="txtNum"> 
+                                        Densidad (No. árboles/ha) 
+                                    </label>
+                                    <input id="txtNum" 
+                                           required
+                                           name="numArboles"
+                                           type="number"
+                                           class="form-control big-input-size"
+                                           placeholder="1111"
+                                           min="0" 
+                                           autocomplete="off"
+                                           oninvalid="this.setCustomValidity('Ingresar un número válido')"
+                                           oninput="setCustomValidity('')">
+
+                                </div>
+
+                                <div style="width: 50%;">
+
+                                    <label for="txtHectareas" 
+                                           style="display:block;">
+                                        Área (Hectáreas)
+                                        <img src="~/Content/images/help.png" 
+                                             class="icon-help pull-right" 
+                                             data-toggle="tooltip"
+                                             data-placement="top"
+                                             title="Cantidad de árboles por hectarea y número total de hectareas" />
+                                    </label>
+                                    <input id="txtHectareas" 
+                                           required
+                                           name="contHectarea" 
+                                           type="number" 
+                                           class="form-control big-input-size" 
+                                           placeholder="1" 
+                                           min="0"
+                                           autocomplete="off"
+                                           oninvalid="this.setCustomValidity('Ingresar un número válido')"
+                                           oninput="setCustomValidity('')">
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- Panel raleos -->
+                        <div class="panel panel-info panel-raleo" 
+                             hidden>
+
+                            <div class="panel-body" 
+                                 style="padding-bottom: 10px;">
+
+                                <div class="row input-upper-margin">
+
+                                    <div class="col-md-3">
+
+                                        <label for="sel_raleo1">
+                                            Año primer raleo
+                                        </label>
+                                        <select id="sel_raleo1" 
+                                                class="form-control big-input-size"
+                                                name="sel_raleo1">
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <label for="pct1">
+                                            % primer raleo
+                                        </label>
+                                        <input id="pct1"
+                                               name="pct1"
+                                               type="number" 
+                                               class="form-control big-input-size"
+                                               placeholder="15" 
+                                               min="0" 
+                                               max="50" 
+                                               step="any"
+                                               autocomplete="off"
+                                               oninvalid="this.setCustomValidity('Ingresar un % válido')" 
+                                               oninput="setCustomValidity('')">
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <label for="sel_raleo2">
+                                            Año segundo raleo
+                                        </label>
+                                        <select id="sel_raleo2"
+                                                class="form-control big-input-size"
+                                                name="sel_raleo2">
+                                        </select>
+
+                                    </div>
+
+                                    <div class="col-md-3">
+
+                                        <label for="pct2">
+                                            % segundo raleo
+                                        </label>
+                                        <input id="pct2" 
+                                               name="pct2" 
+                                               type="number" 
+                                               class="form-control big-input-size"
+                                               placeholder="10"
+                                               min="0" 
+                                               max="50" 
+                                               step="any"
+                                               autocomplete="off"
+                                               oninvalid="this.setCustomValidity('Ingresar un % válido')"
+                                               oninput="setCustomValidity('')">
+                                    </div>
+
+                                </div>
+
+                                <p class="raleo-info">El porcentaje total no puede exceder del 100%</p>
+
+                            </div>
+                        </div>
+
+                        <div class="row input-upper-margin" 
+                             style="padding-left:15px; padding-right:15px;">
+
+                            <label id="lblCheckRaleo"
+                                   style="font-weight:100; color:#dddddd">
+                                <input id="checkRaleo" 
+                                       disabled
+                                       type="checkbox" 
+                                       value="value"> 
+                                Utilizar raleos en el cálculo 
+                            </label>
+
+                        </div>
+
+                        <div class="row calcular-button">
+
+                            <button id="btnSubmitProyectado" 
+                                    type="submit"
+                                    class="btn btn-primary" 
+                                    data-post-url="@Url.Action("calculoProyectado", "Calculator")">
+                                Calcular
+                            </button>
+
+                            <button id="btnResetFormProyectada" 
+                                    type="reset"
+                                    class="btn btn-danger">
+                                Reiniciar
+                            </button>
+
+                        </div>
+                    }
+                    @using (Html.BeginForm("export", "Calculator", FormMethod.Post, new { id = "formExport" }))
+                    {
+                        <div class="row" 
+                             style="margin-right: 0px; margin-top: 4px;">
+                            <button id="btnExportar" 
+                                    type="submit" 
+                                    class="btn btn-success pull-right" 
+                                    style="display:none;">
+                                Exportar
+                            </button>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <!-- /Ingresos -->
+        <!-- Resultado -->
+        <div id="panelResultadoProyectado" 
+             hidden
+             class="row tab-upper-margin"
+             style="margin:20px 0px 0px 0px" >
+
+            <ul class="nav nav-pills nav-justified">
+                <li class="active">
+                    <a data-toggle="tab" id="nav-carbono">Carbono</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" id="nav-dap">DAP</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" id="nav-area">Área basal</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" id="nav-altura">Altura dominante</a>
+                </li>
+                <li>
+                    <a data-toggle="tab" id="nav-volumen">Volumen total</a>
+                </li>
+            </ul>
+            <div class="panel panel-default">
+                <div class="panel-body" 
+                     style="margin: 10px 15px 0px 15px">
+                    <div class="row">
+                        <div id="graph-result" style="width:100%; height:100%;"></div>
+                    </div>
+                    <div class="row">
+                        <div id="data-result"
+                             class="row" 
+                             style="margin: 5px; text-align:center;">
+                            <div style="overflow-x: auto">
+                                <table id="tablaProyectada" 
+                                       class="table table-bordered">
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /.tab-content -->
+                </div>
+            </div>
+            <div class="row" 
+                 style="margin: 15px 0px 0px 0px">
+                <div class="alert alert-info">
+                    Si desea ver cómo se realizó este cálculo, hacer click 
+                    <a  class="alert-link"
+                       href="@Url.Action("Index", "Calculator/about")"> 
+                        aquí 
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- /Resultado -->
+
+    </div>
+    <!-- /Tab Cálculo proyectado-->
+</div>
