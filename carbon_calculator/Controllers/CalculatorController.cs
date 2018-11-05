@@ -33,7 +33,7 @@ namespace carbon_calculator.Controllers
         {
             Specie sp = new Specie(treeName);
             
-            string[] indices = sp.getIndicesDeSitio();
+            string[] indices = sp.getIndicesDeSitio();//Todo: verificar utilidad de esta variable.
             return sp;
         }
 
@@ -113,22 +113,27 @@ namespace carbon_calculator.Controllers
             for (int year = 1; year <= years; year++)
             {
                 /* Proyección de altura dominante */
-                response["altura"][year] = alturaDominanteProyectada(current_specie, current_ground, year);
+                response["altura"][year] = 
+                    alturaDominanteProyectada(current_specie, current_ground, year);
 
                 /* Proyección de DAP */
-                response["dap"][year] = dapProyectado(current_specie, current_ground, year, numArboles);
+                response["dap"][year] = 
+                    dapProyectado(current_specie, current_ground, year, numArboles);
 
                 /* Proyección de Area basal */
-                response["area"][year] = areaProyectada(current_specie, current_ground, year, numArboles);
+                response["area"][year] = 
+                    areaProyectada(current_specie, current_ground, year, numArboles);
 
                 /* Proyección de volumen */
-                double total_vol = 
-                    volumenProyectado(current_specie, current_ground, year, numArboles);
+                double volumenProyectado = 
+                    this.volumenProyectado(current_specie, current_ground, year, numArboles);
 
-                response["volumen"][year] = total_vol;
+                response["volumen"][year] = 
+                    volumenProyectado;
 
                 /* Proyección de carbono */
-                response["carbono"][year] = Math.Round(totalCarbon(total_vol, ms), 8);
+                response["carbono"][year] = 
+                     Math.Round(totalCarbon(volumenProyectado, ms), 8);
             }
 
             return response;
