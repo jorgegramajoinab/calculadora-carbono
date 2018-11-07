@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "carbon_calculator", "carbon
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit_of_work", "unit_of_work\unit_of_work.csproj", "{21140B44-E840-4925-9CD8-5E1E7D366DC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "model", "model\model.csproj", "{7EBCB6C2-3B96-4559-9620-A9C3EF8F5BBA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{21140B44-E840-4925-9CD8-5E1E7D366DC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21140B44-E840-4925-9CD8-5E1E7D366DC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21140B44-E840-4925-9CD8-5E1E7D366DC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7EBCB6C2-3B96-4559-9620-A9C3EF8F5BBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7EBCB6C2-3B96-4559-9620-A9C3EF8F5BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7EBCB6C2-3B96-4559-9620-A9C3EF8F5BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7EBCB6C2-3B96-4559-9620-A9C3EF8F5BBA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
