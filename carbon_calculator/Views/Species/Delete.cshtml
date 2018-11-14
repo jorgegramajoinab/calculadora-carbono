@@ -1,0 +1,79 @@
+﻿@model model.Models.Species
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Eliminar</h2>
+
+<h3>Estas seguro de querer eliminar esta especie?</h3>
+<div>
+    <h4>Especies</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Código");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre simple")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.simpleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre común")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.commonName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre científico")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.scientificName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Coeficiente de forma")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shapeCoefficient)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Límite de años")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.limitYear)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Materia seca")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dryMaterial)
+        </dd>
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-default" /> |
+            @Html.ActionLink("Regresar al listado", "Index")
+        </div>
+    }
+</div>
