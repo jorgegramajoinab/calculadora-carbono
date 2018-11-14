@@ -29,10 +29,11 @@
 
         // Agregue un DbSet para cada tipo de entidad que desee incluir en el modelo. Para obtener más información 
         // sobre cómo configurar y usar un modelo Code First, vea http://go.microsoft.com/fwlink/?LinkId=390109.
-        public virtual DbSet<Coefficient> Coefficients { get; set; }
+        public virtual DbSet<Configuration> Configurations { get; set; }
         public virtual DbSet<Species> Species { get; set; }
         public virtual DbSet<GroundIndex> GroundIndexes { get; set; }
         public virtual DbSet<SpeciesGroundIndex> SpeciesGroundIndexes { get; set; }
+        public virtual DbSet<MathExpression> MathExpressions { get; set; }
         // public virtual DbSet<MyEntity> MyEntities { get; set; }
     }
 

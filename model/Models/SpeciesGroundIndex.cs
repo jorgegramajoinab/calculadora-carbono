@@ -23,6 +23,11 @@ namespace model.Models
             this.value = value;
         }
 
+        public SpeciesGroundIndex()
+        {
+
+        }
+
         [Key]
         public int id { get; set; }
 
@@ -39,5 +44,10 @@ namespace model.Models
 
         [InverseProperty(nameof(Models.GroundIndex.Species))]
         public GroundIndex GroundIndex { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0} ({1}m)", this.GroundIndex is null ? "" : this.GroundIndex.name, this.value);
+        }
     }
 }

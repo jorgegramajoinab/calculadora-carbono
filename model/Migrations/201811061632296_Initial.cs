@@ -8,29 +8,23 @@ namespace model.Migrations
         public override void Up()
         {
             CreateTable(
-                "dbo.Coefficients",
+                "dbo.Configurations",
                 c => new
                     {
-                        Id = c.Int(nullable: false, identity: true),
-                        speciesId = c.Int(nullable: false),
-                        type = c.String(),
-                        value = c.Double(nullable: false),
+                        Id = c.String(nullable: false, maxLength: 128),
+                        Value = c.String(),
+                        Type = c.Byte(nullable: false),
+                        Category = c.Byte(nullable: false),
                     })
-                .PrimaryKey(t => t.Id)
-                .ForeignKey("dbo.Species", t => t.speciesId, cascadeDelete: true)
-                .Index(t => t.speciesId);
+                .PrimaryKey(t => t.Id);
             
             CreateTable(
-                "dbo.Species",
+                "dbo.GroundIndexes",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        code = c.String(),
-                        commonName = c.String(),
-                        scientificName = c.String(),
-                        shapeCoefficient = c.Double(nullable: false),
-                        limitYear = c.Int(nullable: false),
-                        dryMaterial = c.Double(nullable: false),
+                        name = c.String(),
+                        defaultValue = c.Double(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
             
@@ -44,35 +38,54 @@ namespace model.Migrations
                         value = c.Double(nullable: false),
                     })
                 .PrimaryKey(t => t.id)
-                .ForeignKey("dbo.GroundIndexes", t => t.groundIndexId, cascadeDelete: true)
                 .ForeignKey("dbo.Species", t => t.specieId, cascadeDelete: true)
+                .ForeignKey("dbo.GroundIndexes", t => t.groundIndexId, cascadeDelete: true)
                 .Index(t => t.specieId)
                 .Index(t => t.groundIndexId);
             
             CreateTable(
-                "dbo.GroundIndexes",
+                "dbo.Species",
                 c => new
                     {
                         Id = c.Int(nullable: false, identity: true),
-                        name = c.String(),
-                        defaultValue = c.Double(nullable: false),
+                        code = c.String(),
+                        simpleName = c.String(),
+                        commonName = c.String(),
+                        scientificName = c.String(),
+                        shapeCoefficient = c.Double(nullable: false),
+                        limitYear = c.Int(nullable: false),
+                        dryMaterial = c.Double(nullable: false),
                     })
                 .PrimaryKey(t => t.Id);
+            
+            CreateTable(
+                "dbo.MathEspressions",
+                c => new
+                    {
+                        Id = c.Int(nullable: false, identity: true),
+                        SpeciesId = c.Int(nullable: false),
+                        Name = c.String(),
+                        Expression = c.String(),
+                    })
+                .PrimaryKey(t => t.Id)
+                .ForeignKey("dbo.Species", t => t.SpeciesId, cascadeDelete: true)
+                .Index(t => t.SpeciesId);
             
         }
         
         public override void Down()
         {
-            DropForeignKey("dbo.Coefficients", "speciesId", "dbo.Species");
-            DropForeignKey("dbo.SpeciesGroundIndexes", "specieId", "dbo.Species");
             DropForeignKey("dbo.SpeciesGroundIndexes", "groundIndexId", "dbo.GroundIndexes");
+            DropForeignKey("dbo.MathEspressions", "SpeciesId", "dbo.Species");
+            DropForeignKey("dbo.SpeciesGroundIndexes", "specieId", "dbo.Species");
+            DropIndex("dbo.MathEspressions", new[] { "SpeciesId" });
             DropIndex("dbo.SpeciesGroundIndexes", new[] { "groundIndexId" });
             DropIndex("dbo.SpeciesGroundIndexes", new[] { "specieId" });
-            DropIndex("dbo.Coefficients", new[] { "speciesId" });
-            DropTable("dbo.GroundIndexes");
-            DropTable("dbo.SpeciesGroundIndexes");
+            DropTable("dbo.MathEspressions");
             DropTable("dbo.Species");
-            DropTable("dbo.Coefficients");
+            DropTable("dbo.SpeciesGroundIndexes");
+            DropTable("dbo.GroundIndexes");
+            DropTable("dbo.Configurations");
         }
     }
 }

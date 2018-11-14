@@ -66,8 +66,12 @@
       <DependentUpon>201811061632296_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
-    <Compile Include="Models\Coefficient.cs" />
+    <Compile Include="Models\Configuration.cs" />
+    <Compile Include="Models\DataContracts\Categories.cs" />
+    <Compile Include="Models\DataContracts\MathExpressionsDefaultNames.cs" />
+    <Compile Include="Models\DataContracts\Types.cs" />
     <Compile Include="Models\GroundIndex.cs" />
+    <Compile Include="Models\MathExpression.cs" />
     <Compile Include="Models\SpeciesGroundIndex.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Species.cs" />
