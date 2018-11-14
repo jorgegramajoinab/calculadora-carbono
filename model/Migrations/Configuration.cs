@@ -1,7 +1,9 @@
 namespace model.Migrations
 {
     using model.Models;
+    using model.Models.DataContracts;
     using System;
+    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -17,34 +19,16 @@ namespace model.Migrations
         {
             if (!context.Species.Any())
             {
-                addSpecies(context);
+                var species = addSpecies();
+                context.Species.AddRange(species);
                 context.SaveChanges();
             }
         }
 
-        private void addCoefficient(Species species, string coefficientKey, double value) =>
-            species.Coefficients
-                .Add(new Coefficient(coefficientKey, value));
-
-        private void addHeights(Species species, double[] heights) =>
-            Array.ForEach(heights,
-                height => addCoefficient(species, Coefficient.Height, height));
-
-        private void addDAP(Species species, double[] daps) =>
-            Array.ForEach(daps,
-                dap => addCoefficient(species, Coefficient.DAP, dap));
-
-        private void addAreas(Species species, double[] areas) =>
-            Array.ForEach(areas,
-                area => addCoefficient(species, Coefficient.Area, area));
-
-        private void addVolumes(Species species, double[] volumes) =>
-            Array.ForEach(volumes,
-                volume => addCoefficient(species, Coefficient.Volume, volume));
-
-
-        private void addSpecies(CarbonCalculatorModel context)
+        private List<Species> addSpecies()
         {
+            var species = new List<Species>();
+
             var giUnico = new GroundIndex()
             {
                 name = "Único",
@@ -76,580 +60,755 @@ namespace model.Migrations
                 defaultValue = 0
             };
 
+            #region Abies guatemalensis Rehder
             var Pinabete = new Species
             {
+                simpleName = "Pinabete",
                 commonName = "Pinabete (Pashaque, Abeto)",
+                code = "ABIEGU",
                 scientificName = "Abies guatemalensis Rehder",
                 shapeCoefficient = 0.5,
                 limitYear = 18,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 8.58)
+                }
             };
 
-            addHeights(Pinabete, new double[] { -20.378291 });
-            addDAP(Pinabete, new double[] { 4.627246, -11.360686, -0.006167, -0.00133 });
-            addAreas(Pinabete, new double[] { 5.447094, -21.576918, -0.015678, -0.001387 });
-            addVolumes(Pinabete,  new double[] { 8.352033, -41.928436, 0.014195, -0.00184 });
-
-            Pinabete.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 8.58));
-
-            context.Species.Add(Pinabete);
-
+            species.Add(Pinabete);
+            #endregion
+            #region Acrocarpus fraxinifolius Wight &Arn
             var CedroRosado = new Species
             {
+                simpleName = "Cedro Rosado",
                 commonName = "Cedro Rosado (Cedro roso, Mundani)",
+                code = "ACROFR",
                 scientificName = "Acrocarpus fraxinifolius Wight &Arn",
                 shapeCoefficient = 0.5,
                 limitYear = 18,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 16.7),
+                    new SpeciesGroundIndex(giMedio, 21.9),
+                    new SpeciesGroundIndex(giExcelente, 27.9),
+                }
             };
 
-            addHeights(CedroRosado, new double[] { -3.638221 });
-            addDAP(CedroRosado, new double[] { 2.805506, -2.624873, 0.029507, -0.000251 });
-            addAreas(CedroRosado, new double[] { 1.649195, -5.046975, 0.054066, 0.001012 });
-            addVolumes(CedroRosado,  new double[] { 3.117363, -8.840466, 0.107077, 0.000951 });
-
-            CedroRosado.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 16.7));
-            CedroRosado.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 21.9));
-            CedroRosado.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 27.9));
-
-            context.Species.Add(CedroRosado);
-
+            species.Add(CedroRosado);
+            #endregion
+            #region Alnus jorullensis Kunth
             var aliso = new Species
             {
+                simpleName = "Aliso",
                 commonName = "Aliso",
+                code = "ALNUJO",
                 scientificName = "Alnus jorullensis Kunth",
                 shapeCoefficient = 0.5,
                 limitYear = 20,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 13.91),
+                }
             };
 
-            addHeights(aliso, new double[] { -5.183772 });
-            addDAP(aliso, new double[] { 3.479904, -5.100774, 0.005329, -0.000192 });
-            addAreas(aliso, new double[] { 2.046634, -13.359966, 0.071346, 0.001672 });
-            addVolumes(aliso,  new double[] { 5.002828, -19.579749, 0.028559, 0.001735 });
-
-            aliso.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 13.91));
-
-            context.Species.Add(aliso);
-
+            species.Add(aliso);
+            #endregion
+            #region Azadirachta indica A. Juss
             var nim = new Species
             {
+                simpleName = "Nim",
                 commonName = "Nim (Neem)",
+                code = "AZADIN",
                 scientificName = "Azadirachta indica A. Juss",
                 shapeCoefficient = 0.5,
                 limitYear = 9,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giMalo, 6.51),
+                    new SpeciesGroundIndex(giBueno, 10.09),
+                }
             };
 
-            addHeights(nim, new double[] { -1.725435 });
-            addDAP(nim, new double[] { 1.567832, -2.675935, 0.100498, 0.000284 });
-            addAreas(nim, new double[] { -0.421023, -5.328057, 0.199157, 0.001581 });
-            addVolumes(nim,  new double[] { -0.96776, -7.358693, 0.307991, 0.002469 });
-
-            nim.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 6.51));
-            nim.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 10.09));
-
-            context.Species.Add(nim);
-
+            species.Add(nim);
+            #endregion
+            #region Caesalpinia velutina
             var Aripin = new Species
             {
+                simpleName = "Aripin",
                 commonName = "Aripin",
+                code = "CAESVE",
                 scientificName = "Caesalpinia velutina",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 8.03),
+                }
             };
 
-            addHeights(Aripin, new double[] { -1.872405 });
-            addDAP(Aripin, new double[] { 1.983661, -2.330208, 0.095564, -0.000385 });
-            addAreas(Aripin, new double[] { 0.83226, -4.71375, 0.189626, -0.000097 });
-            addVolumes(Aripin,  new double[] { 1.278762, -7.15454, 0.35243, -0.000352 });
-
-            Aripin.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 8.03));
-
-            context.Species.Add(Aripin);
-
+            species.Add(Aripin);
+            #endregion
+            #region Calophyllum brasiliense Cambess
             var SantaMaria = new Species
             {
+                simpleName = "Santa María",
                 commonName = "Santa María (Marío, leche)",
+                code = "CALOBR",
                 scientificName = "Calophyllum brasiliense Cambess",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 11.72),
+                }
             };
 
-            addHeights(SantaMaria, new double[] { -7.657288 });
-            addDAP(SantaMaria, new double[] { 3.861522, -7.008542, 0.027548, -0.001144 });
-            addAreas(SantaMaria, new double[] { 4.181024, -13.83883, 0.051651, -0.001286 });
-            addVolumes(SantaMaria,  new double[] { 6.72825, -21.067206, 0.087027, -0.002144 });
-
-            SantaMaria.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 11.72));
-
-            context.Species.Add(SantaMaria);
-
+            species.Add(SantaMaria);
+            #endregion
+            #region Casuarina equisetifolia L.
             var Casuarina = new Species
             {
+                simpleName = "Casuarina",
                 commonName = "Casuarina",
+                code = "CASUEQ",
                 scientificName = "Casuarina equisetifolia L.",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 7.1),
+                }
             };
 
-            addHeights(Casuarina, new double[] { -5.886381 });
-            addDAP(Casuarina, new double[] { 3.041145, -8.076789, -0.014162, -0.000069 });
-            addAreas(Casuarina, new double[] { 2.462079, -17.066455, -0.019585, 0.00093 });
-            addVolumes(Casuarina,  new double[] { 4.147779, -16.451739, -0.039504, 0.000229 });
-
-            Casuarina.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 7.1));
-
-            context.Species.Add(Casuarina);
-
+            species.Add(Casuarina);
+            #endregion
+            #region Cedrela odorata L.
             var Cedro = new Species
             {
+                simpleName = "Cedro",
                 commonName = "Cedro (Cedro rojo)",
+                code = "CEDROD",
                 scientificName = "Cedrela odorata L.",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 7),
+                }
             };
 
-            addHeights(Cedro, new double[] { -4.034014 });
-            addDAP(Cedro, new double[] { 2.334384, -4.530798, 0.145447, -0.001743 });
-            addAreas(Cedro, new double[] { -0.173934, -9.532625, 0.302835, -0.000013 });
-            addVolumes(Cedro,  new double[] { 0.988436, -11.063187, 0.417214, -0.002467 });
-
-            Cedro.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 7));
-
-            context.Species.Add(Cedro);
-
+            species.Add(Cedro);
+            #endregion
+            #region Cupressus lusitanica Mill.
             var CipresComun = new Species
             {
+                simpleName = "Cipres Común",
                 commonName = "Cipres Común (Ciprés)",
+                code = "CUPRLU",
                 scientificName = "Cupressus lusitanica Mill.",
                 shapeCoefficient = 0.5,
                 limitYear = 19,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 6),
+                    new SpeciesGroundIndex(giMalo, 9.25),
+                    new SpeciesGroundIndex(giMedio, 12.50),
+                    new SpeciesGroundIndex(giBueno, 14.75),
+                    new SpeciesGroundIndex(giExcelente, 17),
+                }
             };
 
-            addHeights(CipresComun, new double[] { -6.731967 });
-            addDAP(CipresComun, new double[] { 2.707584, -5.677218, 0.067381, -0.000247 });
-            addAreas(CipresComun, new double[] { 2.045355, -10.794574, 0.118218, 0.00037 });
-            addVolumes(CipresComun,  new double[] { 3.118363, -17.429548, 0.215077, 0.000309 });
-
-            CipresComun.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 6));
-            CipresComun.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 9.25));
-            CipresComun.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 12.50));
-            CipresComun.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 14.75));
-            CipresComun.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 17));
-
-            context.Species.Add(CipresComun);
-
+            species.Add(CipresComun);
+            #endregion
+            #region Enterolobium cyclocarpum
             var Conacaste = new Species
             {
+                simpleName = "Conacaste",
                 commonName = "Conacaste",
+                code = "ENTECY",
                 scientificName = "Enterolobium cyclocarpum",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 9),
+                }
             };
 
-            addHeights(Conacaste, new double[] { -4.624413 });
-            addDAP(Conacaste, new double[] { 2.274322, -6.302477, 0.086746, 0.000159 });
-            addAreas(Conacaste, new double[] { 1.102299, -12.647657, 0.170789, 0.001247 });
-            addVolumes(Conacaste,  new double[] { 2.049391, -18.839421, 0.264324, 0.001348 });
-
-            Conacaste.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 9));
-
-            context.Species.Add(Conacaste);
-
+            species.Add(Conacaste);
+            #endregion
+            #region Gmelina arbórea Roxb. ex. Sm
             var Melina = new Species
             {
+                simpleName = "Melina",
                 commonName = "Melina",
+                code = "GMELAR",
                 scientificName = "Gmelina arbórea Roxb. ex. Sm",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 8.62),
+                    new SpeciesGroundIndex(giMalo, 14.31),
+                    new SpeciesGroundIndex(giMedio, 20.01),
+                    new SpeciesGroundIndex(giBueno, 24.18),
+                    new SpeciesGroundIndex(giExcelente, 28.35),
+                }
             };
 
-            addHeights(Melina, new double[] { -4.589766 });
-            addDAP(Melina, new double[] { 2.476769, -3.669808, 0.048356, -0.000258 });
-            addAreas(Melina, new double[] { 0.780617, -7.094758, 0.092946, 0.001186 });
-            addVolumes(Melina,  new double[] { 1.918322, -11.678936, 0.160806, 0.001068 });
-
-            Melina.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 8.62));
-            Melina.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 14.31));
-            Melina.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 20.01));
-            Melina.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 24.18));
-            Melina.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 28.35));
-
-            context.Species.Add(Melina);
-
+            species.Add(Melina);
+            #endregion
+            #region Guazuma ulmifolia Lam
             var Caulote = new Species
             {
+                simpleName = "Caulote",
                 commonName = "Caulote",
+                code = "GUAZUL",
                 scientificName = "Guazuma ulmifolia Lam",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 6.54),
+                }
             };
 
-            addHeights(Caulote, new double[] { -0.684405 });
-            addDAP(Caulote, new double[] { 2.762289, -2.32964, 0.014772, -0.000567 });
-            addAreas(Caulote, new double[] { 2.143734, -4.666703, 0.028075, -0.000276 });
-            addVolumes(Caulote,  new double[] { 1.966696, -6.206873, 0.119088, 0.000292 });
-
-            Caulote.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 6.54));
-
-            context.Species.Add(Caulote);
-
+            species.Add(Caulote);
+            #endregion
+            #region Guazuma ulmifolia Lam
             var Canoj = new Species
             {
+                simpleName = "Canoj",
                 commonName = "Canoj",
+                code = "TECTGR",
                 scientificName = "Guazuma ulmifolia Lam",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 13.33),
+                }
             };
 
-            addHeights(Canoj, new double[] { -8.798094 });
-            addDAP(Canoj, new double[] { 3.112788, -6.202454, 0.078664, -0.001055 });
-            addAreas(Canoj, new double[] { 2.642654, -12.355272, 0.1598, -0.00112 });
-            addVolumes(Canoj,  new double[] { 4.313634, -21.102053, 0.245205, -0.001508 });
-
-            Canoj.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 13.33));
-
-            context.Species.Add(Canoj);
-
+            species.Add(Canoj);
+            #endregion
+            #region Pinus Caribaea var. hondurensis (Sénécl.) W. H. Barret & Golfari
             var PinoCaribe = new Species
             {
+                simpleName = "Pino Caribe",
                 commonName = "Pino Caribe (Pino de Petén)",
                 code = "PINUCH",
                 scientificName = "Pinus Caribaea var. hondurensis (Sénécl.) W. H. Barret & Golfari",
                 shapeCoefficient = 0.5,
                 limitYear = 25,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 9.43),
+                    new SpeciesGroundIndex(giMalo, 12.46),
+                    new SpeciesGroundIndex(giMedio, 15.49),
+                    new SpeciesGroundIndex(giBueno, 17.36),
+                    new SpeciesGroundIndex(giExcelente, 19.23),
+                }
             };
 
-            /* Asignacion de coeficientes de altura dominante */
-            addHeights(PinoCaribe, new double[] { -7.458911 });
-            /* Asignacion de coeficientes de DAP */
-            addDAP(PinoCaribe, new double[] { 2.673197, -5.545766, 0.056028, -0.000142 });
-            /* Asignacion de coeficientes de Area basal */
-            addAreas(PinoCaribe, new double[] { 1.325956, -11.038033, 0.091341, 0.001634 });
-            /* Asignacion de coeficientes de volumen */
-            addVolumes(PinoCaribe, new double[] { 2.671109, -18.578108, 0.171615, 0.001541 });
-
-            PinoCaribe.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 9.43));
-            PinoCaribe.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 12.46));
-            PinoCaribe.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 15.49));
-            PinoCaribe.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 17.36));
-            PinoCaribe.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 19.23));
-
-            context.Species.Add(PinoCaribe);
-
+            species.Add(PinoCaribe);
+            #endregion
+            #region Pinus Maximinoi H. E. Moore
             var PinoCandelillo = new Species
             {
+                simpleName = "Pino Candelillo",
                 commonName = "Pino Candelillo",
                 code = "PINUMI",
                 scientificName = "Pinus Maximinoi H. E. Moore",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 8.18),
+                    new SpeciesGroundIndex(giMalo, 11.65),
+                    new SpeciesGroundIndex(giMedio, 15.12),
+                    new SpeciesGroundIndex(giBueno, 18.26),
+                    new SpeciesGroundIndex(giExcelente, 21.40),
+                }
             };
 
-            /* Asignacion de coeficientes de altura dominante */
-            addHeights(PinoCandelillo, new double[] { -6.96328 });
-            /* Asignacion de coeficientes de DAP */
-            addDAP(PinoCandelillo, new double[] { 2.853221, -5.94932, 0.055943, -0.000218 });
-            /* Asignacion de coeficientes de Area basal */
-            addAreas(PinoCandelillo, new double[] { 1.91575, -11.592777, 0.100823, 0.000843 });
-            /* Asignacion de coeficientes de volumen */
-            addVolumes(PinoCandelillo, new double[] { 3.160695, -18.203956, 0.182736, 0.000775 });
-
-            PinoCandelillo.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 8.18));
-            PinoCandelillo.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 11.65));
-            PinoCandelillo.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 15.12));
-            PinoCandelillo.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 18.26));
-            PinoCandelillo.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 21.40));
-
-            context.Species.Add(PinoCandelillo);
-
+            species.Add(PinoCandelillo);
+            #endregion
+            #region Pinus sp Schiede
             var PinoOcote = new Species
             {
+                simpleName = "Pino Ocote",
                 commonName = "Pino Ocote (Pino colorado)",
                 code = "PINUOO",
                 scientificName = "Pinus sp Schiede",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 5.92),
+                    new SpeciesGroundIndex(giMalo, 9.67),
+                    new SpeciesGroundIndex(giMedio, 13.42),
+                    new SpeciesGroundIndex(giBueno, 15.64),
+                    new SpeciesGroundIndex(giExcelente, 17.86),
+                }
             };
 
-            /* Asignacion de coeficientes de altura dominante */
-            addHeights(PinoOcote, new double[] { -6.498108 });
-            /* Asignacion de coeficientes de DAP */
-            addDAP(PinoOcote, new double[] { 2.426552, -6.706013, 0.075921, 0.00004 });
-            /* Asignacion de coeficientes de Area basal */
-            addAreas(PinoOcote, new double[] { 1.060976, -13.35596, 0.15187, 0.001278 });
-            /* Asignacion de coeficientes de volumen */
-            addVolumes(PinoOcote, new double[] { 2.246512, -20.855741, 0.242321, 0.001267 });
-
-            PinoOcote.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 5.92));
-            PinoOcote.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 9.67));
-            PinoOcote.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 13.42));
-            PinoOcote.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 15.64));
-            PinoOcote.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 17.86));
-
-            context.Species.Add(PinoOcote);
-
+            species.Add(PinoOcote);
+            #endregion
+            #region Pinus patula Schltdl. & Cham.
             var PinoPatula = new Species
             {
+                simpleName = "Pino Pátula",
                 commonName = "Pino Pátula",
+                code = "PINUPA",
                 scientificName = "Pinus patula Schltdl. & Cham.",
                 shapeCoefficient = 0.5,
                 limitYear = 10,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 8.53),
+                }
             };
 
-            addHeights(PinoPatula, new double[] { -6.921948 });
-            addDAP(PinoPatula, new double[] { 1.842624, -7.912709, 0.204784, -0.000193 });
-            addAreas(PinoPatula,  new double[] { 0.592964, -16.050104, 0.399771, 0.000318 });
-            addVolumes(PinoPatula,  new double[] { 1.57958, -21.303008, 0.507162, 0.000117 });
 
-            PinoPatula.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 8.53));
-
-            context.Species.Add(PinoPatula);
-
+            species.Add(PinoPatula);
+            #endregion
+            #region Pinus pseudostrobus Lindl
             var PinoTriste = new Species
             {
+                simpleName = "Pino Triste",
                 commonName = "Pino Triste (Pino blanco)",
+                code = "PINUSP",
                 scientificName = "Pinus pseudostrobus Lindl",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 8.32),
+                    new SpeciesGroundIndex(giMalo, 10.77),
+                    new SpeciesGroundIndex(giMedio, 13.21),
+                    new SpeciesGroundIndex(giBueno, 14.16),
+                    new SpeciesGroundIndex(giExcelente, 16.01),
+                }
             };
 
-            addHeights(PinoTriste, new double[] { -11.729867 });
-            addDAP(PinoTriste, new double[] { 3.298035, -10.936875, 0.065073, -0.000083 });
-            addAreas(PinoTriste,  new double[] { 2.367995, -21.373573, 0.153433, 0.001055 });
-            addVolumes(PinoTriste,  new double[] { 4.039077, -32.749693, 0.242141, 0.000967 });
-
-            PinoTriste.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 8.32));
-            PinoTriste.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 10.77));
-            PinoTriste.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 13.21));
-            PinoTriste.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 14.16));
-            PinoTriste.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 16.01));
-
-            context.Species.Add(PinoTriste);
-
+            species.Add(PinoTriste);
+            #endregion
+            #region Pinus pseudostrobus Lindl
             var PaloDeSangre = new Species
             {
+                simpleName = "Pino de Sangre",
                 commonName = "Palo de Sangre (Sangre y cahué)",
+                code = "PTEROF",
                 scientificName = "Pinus pseudostrobus Lindl",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 11.21),
+                    new SpeciesGroundIndex(giMedio, 13.32),
+                    new SpeciesGroundIndex(giExcelente, 16.05),
+                }
             };
 
-            addHeights(PaloDeSangre, new double[] { -8.864079 });
-            addDAP(PaloDeSangre, new double[] { 2.533776, -6.885158, 0.065936, -0.000115 });
-            addAreas(PaloDeSangre,  new double[] { 1.129202, -14.091632, 0.126178, 0.001344 });
-            addVolumes(PaloDeSangre,  new double[] { 2.56331, -23.018699, 0.214254, 0.001243 });
-
-            PaloDeSangre.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 11.21));
-            PaloDeSangre.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 13.32));
-            PaloDeSangre.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 16.05));
-
-            context.Species.Add(PaloDeSangre);
-
+            species.Add(PaloDeSangre);
+            #endregion
+            #region Pinus pseudostrobus Lindl
             var Casia = new Species
             {
+                simpleName = "Casia",
                 commonName = "Casia",
+                code = "SENNGU",
                 scientificName = "Pinus pseudostrobus Lindl",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 10.17),
+                }
             };
 
-            addHeights(Casia, new double[] { -6.116833 });
-            addDAP(Casia, new double [] { 1.49521, -1.851407, 0.116224, -0.000438 });
-            addAreas(Casia,  new double[] { -0.306671, -4.378177, 0.225725, -0.000003 });
-            addVolumes(Casia,  new double[] { 0.584018, -9.960148, 0.294692, 0.000274 });
-
-            Casia.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 10.17));
-
-            context.Species.Add(Casia);
-
+            species.Add(Casia);
+            #endregion
+            #region Simira salvadorensis
             var PaloVolador = new Species
             {
+                simpleName = "Palo Volador",
                 commonName = "Palo Volador",
+                code = "SIMISA",
                 scientificName = "Simira salvadorensis",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 14.47),
+                }
             };
 
-            addHeights(PaloVolador, new double[] { -7.563575 });
-            addDAP(PaloVolador, new double [] { 2.624014, -10.108301, 0.030276, 0.000414 });
-            addAreas(PaloVolador,  new double[] { 1.609769, -20.178575, 0.060325, 0.001922 });
-            addVolumes(PaloVolador,  new double[] { 5.394304, -23.23099, 0.128387, -0.001331 });
-
-            PaloVolador.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 14.47));
-
-            context.Species.Add(PaloVolador);
-
+            species.Add(PaloVolador);
+            #endregion
+            #region Swietenia macrophylla
             var Caoba = new Species
             {
+                simpleName = "Caoba",
                 commonName = "Caoba (Caoba del norte)",
+                code = "SWIEMA",
                 scientificName = "Swietenia macrophylla",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 5.40),
+                    new SpeciesGroundIndex(giMalo, 9.32),
+                    new SpeciesGroundIndex(giMedio, 13.24),
+                    new SpeciesGroundIndex(giBueno, 15.60),
+                    new SpeciesGroundIndex(giExcelente, 17.96),
+                }
             };
 
-            addHeights(Caoba, new double[] { -10.900122 });
-            addDAP(Caoba, new double [] { 2.630349, -10.089983, 0.075246, 0.000075 });
-            addAreas(Caoba,  new double[] { 0.830452, -20.722084, 0.164495, 0.001994 });
-            addVolumes(Caoba,  new double[] { 2.239672, -32.894188, 0.260104, 0.002181 });
-
-            Caoba.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 5.40));
-            Caoba.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 9.32));
-            Caoba.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 13.24));
-            Caoba.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 15.60));
-            Caoba.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 17.96));
-
-            context.Species.Add(Caoba);
-
+            species.Add(Caoba);
+            #endregion
+            #region Tabebuia donnel-smithii Rose
             var PaloBlanco = new Species
             {
+                simpleName = "Palo Blanco",
                 commonName = "Palo Blanco",
                 code = "TABEDO",
                 scientificName = "Tabebuia donnel-smithii Rose",
                 shapeCoefficient = 0.5,
                 limitYear = 15,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 6.15),
+                    new SpeciesGroundIndex(giMalo, 9.55),
+                    new SpeciesGroundIndex(giMedio, 12.95),
+                    new SpeciesGroundIndex(giBueno, 15.74),
+                    new SpeciesGroundIndex(giExcelente, 18.53),
+                }
             };
 
-            /* Asignacion de coeficientes de altura dominante */
-            addHeights(PaloBlanco, new double[] { -3.617786 });
-            /* Asignacion de coeficientes de DAP */
-            addDAP(PaloBlanco, new double[] { 1.663888, -2.480653, 0.089199, -0.000146 });
-            /* Asignacion de coeficientes de Area basal */
-            addAreas(PaloBlanco, new double[] { -0.668643, -4.714003, 0.181244, 0.00101 });
-            /* Asignacion de coeficientes de volumen */
-            addVolumes(PaloBlanco, new double[] { 0.117821, -8.184507, 0.271737, 0.000896 });
-
-            PaloBlanco.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 6.15));
-            PaloBlanco.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 9.55));
-            PaloBlanco.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 12.95));
-            PaloBlanco.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 15.74));
-            PaloBlanco.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 18.53));
-
-
-            context.Species.Add(PaloBlanco);
-
+            species.Add(PaloBlanco);
+            #endregion
+            #region Swietenia macrophylla
             var Matilisguate = new Species
             {
+                simpleName = "Matilisguate",
                 commonName = "Matilisguate",
+                code = "SWIEMA",
                 scientificName = "Swietenia macrophylla",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 3.83),
+                    new SpeciesGroundIndex(giMalo, 5.90),
+                    new SpeciesGroundIndex(giMedio, 7.97),
+                    new SpeciesGroundIndex(giBueno, 10.85),
+                    new SpeciesGroundIndex(giExcelente, 13.73),
+                }
             };
 
-            addHeights(Matilisguate, new double[] { -3.662898 });
-            addDAP(Matilisguate, new double [] { 1.320543, -4.009256, 0.158326, -0.000237 });
-            addAreas(Matilisguate,  new double[] { -1.422144, -8.124784, 0.299527, 0.001255 });
-            addVolumes(Matilisguate,  new double[] { -1.137584, -12.265933, 0.4431, 0.001109 });
-
-            Matilisguate.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 3.83));
-            Matilisguate.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 5.90));
-            Matilisguate.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 7.97));
-            Matilisguate.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 10.85));
-            Matilisguate.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 13.73));
-
-            context.Species.Add(Matilisguate);
-
+            species.Add(Matilisguate);
+            #endregion
+            #region Tectona GrandisL. f.
             var Teca = new Species
             {
+                simpleName = "Teca",
                 commonName = "Teca",
                 code = "TECTGR",
                 scientificName = "Tectona GrandisL. f.",
                 shapeCoefficient = 0.5,
                 limitYear = 17,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giPesimo, 7.60),
+                    new SpeciesGroundIndex(giMalo, 13.34),
+                    new SpeciesGroundIndex(giMedio, 19.07),
+                    new SpeciesGroundIndex(giBueno, 24.36),
+                    new SpeciesGroundIndex(giExcelente, 29.65),
+                }
             };
 
-            /* Asignacion de coeficientes de altura dominante */
-            addHeights(Teca, new double[] { -3.891677 });
-            /* Asignacion de coeficientes de DAP */
-            addDAP(Teca, new double[] { 2.293225, -4.118555, 0.052407, -0.000131 });
-            /* Asignacion de coeficientes de Area basal */
-            addAreas(Teca, new double[] { 0.613447, -7.899548, 0.09739, 0.001207 });
-            /* Asignacion de coeficientes de volumen */
-            addVolumes(Teca, new double[] { 1.605596, -12.336335, 0.166684, 0.001142 });
-
-            Teca.GroundIndexes.Add(new SpeciesGroundIndex(giPesimo, 7.60));
-            Teca.GroundIndexes.Add(new SpeciesGroundIndex(giMalo, 13.34));
-            Teca.GroundIndexes.Add(new SpeciesGroundIndex(giMedio, 19.07));
-            Teca.GroundIndexes.Add(new SpeciesGroundIndex(giBueno, 24.36));
-            Teca.GroundIndexes.Add(new SpeciesGroundIndex(giExcelente, 29.65));
-
-            context.Species.Add(Teca);
-
+            species.Add(Teca);
+            #endregion
+            #region Terminalia buceras
             var Pukte = new Species
             {
+                simpleName = "Pukté",
                 commonName = "Pukté",
+                code = "TERMBU",
                 scientificName = "Terminalia buceras",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 9.92),
+                }
             };
 
-            addHeights(Pukte, new double[] { -1.741207 });
-            addDAP(Pukte, new double [] { 3.257189, -3.956527, 0.009321, 0 });
-            addAreas(Pukte,  new double[] { 3.695791, -7.913055, -0.018641, 0 });
-            addVolumes(Pukte,  new double[] { 4.588308, -10.377622, 0.049617, 0 });
-
-            Pukte.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 9.92));
-
-            context.Species.Add(Pukte);
-
+            species.Add(Pukte);
+            #endregion
+            #region Terminalia oblonga
             var Guayabon = new Species
             {
+                simpleName = "Guayabon",
                 commonName = "Guayabon",
-                scientificName = "Terminalia buceras",
+                code = "TECTGR",
+                scientificName = "Terminalia oblonga",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 14.47),
+                }
             };
 
-            addHeights(Guayabon, new double[] { -7.206822 });
-            addDAP(Guayabon, new double [] { 2.537212, -5.780087, 0.00923, 0.00057 });
-            addAreas(Guayabon,  new double[] { 1.203433, -11.513972, 0.018414, 0.00251 });
-            addVolumes(Guayabon,  new double[] { 3.066308, -19.106921, 0.07381, 0.002185 });
-
-            Guayabon.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 14.47));
-
-            context.Species.Add(Guayabon);
-
+            species.Add(Guayabon);
+            #endregion
+            #region Vochysia guatemalensis Donn. Sm.
             var SanJuan = new Species
             {
+                simpleName = "San Juan",
                 commonName = "San Juan",
+                code = "VOCHGU",
                 scientificName = "Vochysia guatemalensis Donn. Sm.",
                 shapeCoefficient = 0.5,
                 limitYear = 16,
-                dryMaterial = 0.5
+                dryMaterial = 0.5,
+                GroundIndexes = new SpeciesGroundIndex[]
+                {
+                    new SpeciesGroundIndex(giUnico, 13.8),
+                }
             };
 
-            addHeights(SanJuan, new double[] { -8.904588 });
-            addDAP(SanJuan, new double [] { 2.769514, -7.431654, 0.050203, -0.000043 });
-            addAreas(SanJuan,  new double[] { 1.651327, -15.314681, 0.099127, 0.001388 });
-            addVolumes(SanJuan,  new double[] { 1.140516, -32.901795, 0.275811, 0.003415 });
+            species.Add(SanJuan);
+            #endregion
 
-            SanJuan.GroundIndexes.Add(new SpeciesGroundIndex(giUnico, 13.8));
 
-            context.Species.Add(SanJuan);
+            var mathExpressions = this.MathExpressions;
+
+            mathExpressions.ForEach(
+                item =>
+                {
+                    var wantedSpecies = 
+                        species
+                            .FirstOrDefault(
+                                specie => 
+                                specie.simpleName
+                                    .ToLower()
+                                    .Trim()
+                                    .Equals(item.Key.ToLower().Trim())
+                            );
+
+                    if(wantedSpecies != null)
+                    {
+                        wantedSpecies.MathExpressions.Add(item.Value);
+                    }
+                });
+
+            return species;
         }
+
+        private List<KeyValuePair<string, MathExpression>> MathExpressions
+        {
+            get => new List<KeyValuePair<string, MathExpression>>() {
+                new KeyValuePair<string, MathExpression>("Pinabete", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -20.378291( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pinabete", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -20.378291( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pinabete", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 4.627246 - 11.360686/t - 0.006167s - 0.00133n )")),
+                new KeyValuePair<string, MathExpression>("Pinabete", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 5.447094 - 21.576918/t - 0.015678s - 0.001387n )")),
+                new KeyValuePair<string, MathExpression>("Pinabete", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 8.352033 - 41.928436/t + 0.014195s - 0.00184n )")),
+
+                new KeyValuePair<string, MathExpression>("Cedro Rosado", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -3.638221( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cedro Rosado", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -3.638221( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cedro Rosado", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.805506 - 2.624873/t + 0.029507s - 0.000251n )")),
+                new KeyValuePair<string, MathExpression>("Cedro Rosado", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.649195 - 5.046975/t + 0.054066s + 0.001012n )")),
+                new KeyValuePair<string, MathExpression>("Cedro Rosado", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 3.117363 - 8.840466/t + 0.107077s + 0.000951n )")),
+
+                new KeyValuePair<string, MathExpression>("Aliso", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -5.183772( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Aliso", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -5.183772( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Aliso", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.479904 - 5.100774/t + 0.005329s - 0.000192n )")),
+                new KeyValuePair<string, MathExpression>("Aliso", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.046634 - 13.359966/t + 0.071346s + 0.001672n )")),
+                new KeyValuePair<string, MathExpression>("Aliso", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 5.002828 - 19.579749/t + 0.028559s + 0.001735n )")),
+
+                new KeyValuePair<string, MathExpression>("Nim", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -1.725435( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Nim", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -1.725435( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Nim", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.567832 - 2.675935/t + 0.100498s + 0.000284n )")),
+                new KeyValuePair<string, MathExpression>("Nim", new MathExpression(MathExpressionsDefaultNames.Area, "exp( -0.421023 - 5.328057/t + 0.199157s + 0.001581n )")),
+                new KeyValuePair<string, MathExpression>("Nim", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( -0.96776 - 7.358693/t + 0.307991s + 0.002469n )")),
+
+                new KeyValuePair<string, MathExpression>("Aripin", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -1.872405( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Aripin", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -1.872405( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Aripin", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.983661 - 2.330208/t + 0.095564s - 0.000385n )")),
+                new KeyValuePair<string, MathExpression>("Aripin", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 0.83226 - 4.71375/t + 0.189626s - 9.7E-05n )")),
+                new KeyValuePair<string, MathExpression>("Aripin", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.278762 - 7.15454/t + 0.35243s - 0.000352n )")),
+
+                new KeyValuePair<string, MathExpression>("Santa María", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -7.657288( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Santa María", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -7.657288( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Santa María", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.861522 - 7.008542/t + 0.027548s - 0.001144n )")),
+                new KeyValuePair<string, MathExpression>("Santa María", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 4.181024 - 13.83883/t + 0.051651s - 0.001286n )")),
+                new KeyValuePair<string, MathExpression>("Santa María", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 6.72825 - 21.067206/t + 0.087027s - 0.002144n )")),
+
+                new KeyValuePair<string, MathExpression>("Casuarina", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -5.886381( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Casuarina", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -5.886381( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Casuarina", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.041145 - 8.076789/t - 0.014162s - 6.9E-05n )")),
+                new KeyValuePair<string, MathExpression>("Casuarina", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.462079 - 17.066455/t - 0.019585s + 0.00093n )")),
+                new KeyValuePair<string, MathExpression>("Casuarina", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 4.147779 - 16.451739/t - 0.039504s + 0.000229n )")),
+
+                new KeyValuePair<string, MathExpression>("Cedro", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -4.034014( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cedro", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -4.034014( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cedro", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.334384 - 4.530798/t + 0.145447s - 0.001743n )")),
+                new KeyValuePair<string, MathExpression>("Cedro", new MathExpression(MathExpressionsDefaultNames.Area, "exp( -0.173934 - 9.532625/t + 0.302835s - 1.3E-05n )")),
+                new KeyValuePair<string, MathExpression>("Cedro", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 0.988436 - 11.063187/t + 0.417214s - 0.002467n )")),
+
+                new KeyValuePair<string, MathExpression>("Cipres Común", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -6.731967( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cipres Común", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -6.731967( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Cipres Común", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.707584 - 5.677218/t + 0.067381s - 0.000247n )")),
+                new KeyValuePair<string, MathExpression>("Cipres Común", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.045355 - 10.794574/t + 0.118218s + 0.00037n )")),
+                new KeyValuePair<string, MathExpression>("Cipres Común", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 3.118363 - 17.429548/t + 0.215077s + 0.000309n )")),
+
+                new KeyValuePair<string, MathExpression>("Conacaste", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -4.624413( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Conacaste", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -4.624413( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Conacaste", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.274322 - 6.302477/t + 0.086746s + 0.000159n )")),
+                new KeyValuePair<string, MathExpression>("Conacaste", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.102299 - 12.647657/t + 0.170789s + 0.001247n )")),
+                new KeyValuePair<string, MathExpression>("Conacaste", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 2.049391 - 18.839421/t + 0.264324s + 0.001348n )")),
+
+                new KeyValuePair<string, MathExpression>("Melina", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -4.589766( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Melina", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -4.589766( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Melina", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.476769 - 3.669808/t + 0.048356s - 0.000258n )")),
+                new KeyValuePair<string, MathExpression>("Melina", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 0.780617 - 7.094758/t + 0.092946s + 0.001186n )")),
+                new KeyValuePair<string, MathExpression>("Melina", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.918322 - 11.678936/t + 0.160806s + 0.001068n )")),
+
+                new KeyValuePair<string, MathExpression>("Caulote", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -0.684405( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Caulote", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -0.684405( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Caulote", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.762289 - 2.32964/t + 0.014772s - 0.000567n )")),
+                new KeyValuePair<string, MathExpression>("Caulote", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.143734 - 4.666703/t + 0.028075s - 0.000276n )")),
+                new KeyValuePair<string, MathExpression>("Caulote", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.966696 - 6.206873/t + 0.119088s + 0.000292n )")),
+
+                new KeyValuePair<string, MathExpression>("Canoj", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -8.798094( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Canoj", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -8.798094( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Canoj", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.112788 - 6.202454/t + 0.078664s - 0.001055n )")),
+                new KeyValuePair<string, MathExpression>("Canoj", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.642654 - 12.355272/t + 0.1598s - 0.00112n )")),
+                new KeyValuePair<string, MathExpression>("Canoj", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 4.313634 - 21.102053/t + 0.245205s - 0.001508n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino Caribe", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -7.458911( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Caribe", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -7.458911( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Caribe", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.673197 - 5.545766/t + 0.056028s - 0.000142n )")),
+                new KeyValuePair<string, MathExpression>("Pino Caribe", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.325956 - 11.038033/t + 0.091341s + 0.001634n )")),
+                new KeyValuePair<string, MathExpression>("Pino Caribe", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 2.671109 - 18.578108/t + 0.171615s + 0.001541n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino Candelillo", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -6.96328( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Candelillo", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -6.96328( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Candelillo", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.853221 - 5.94932/t + 0.055943s - 0.000218n )")),
+                new KeyValuePair<string, MathExpression>("Pino Candelillo", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.91575 - 11.592777/t + 0.100823s + 0.000843n )")),
+                new KeyValuePair<string, MathExpression>("Pino Candelillo", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 3.160695 - 18.203956/t + 0.182736s + 0.000775n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino Ocote", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -6.498108( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Ocote", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -6.498108( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Ocote", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.426552 - 6.706013/t + 0.075921s + 4E-05n )")),
+                new KeyValuePair<string, MathExpression>("Pino Ocote", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.060976 - 13.35596/t + 0.15187s + 0.001278n )")),
+                new KeyValuePair<string, MathExpression>("Pino Ocote", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 2.246512 - 20.855741/t + 0.242321s + 0.001267n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino Pátula", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -6.921948( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Pátula", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -6.921948( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Pátula", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.842624 - 7.912709/t + 0.204784s - 0.000193n )")),
+                new KeyValuePair<string, MathExpression>("Pino Pátula", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 0.592964 - 16.050104/t + 0.399771s + 0.000318n )")),
+                new KeyValuePair<string, MathExpression>("Pino Pátula", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.57958 - 21.303008/t + 0.507162s + 0.000117n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino Triste", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -11.729867( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Triste", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -11.729867( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino Triste", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.298035 - 10.936875/t + 0.065073s - 8.3E-05n )")),
+                new KeyValuePair<string, MathExpression>("Pino Triste", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 2.367995 - 21.373573/t + 0.153433s + 0.001055n )")),
+                new KeyValuePair<string, MathExpression>("Pino Triste", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 4.039077 - 32.749693/t + 0.242141s + 0.000967n )")),
+
+                new KeyValuePair<string, MathExpression>("Pino de Sangre", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -8.864079( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino de Sangre", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -8.864079( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pino de Sangre", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.533776 - 6.885158/t + 0.065936s - 0.000115n )")),
+                new KeyValuePair<string, MathExpression>("Pino de Sangre", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.129202 - 14.091632/t + 0.126178s + 0.001344n )")),
+                new KeyValuePair<string, MathExpression>("Pino de Sangre", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 2.56331 - 23.018699/t + 0.214254s + 0.001243n )")),
+
+                new KeyValuePair<string, MathExpression>("Casia", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -6.116833( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Casia", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -6.116833( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Casia", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.49521 - 1.851407/t + 0.116224s - 0.000438n )")),
+                new KeyValuePair<string, MathExpression>("Casia", new MathExpression(MathExpressionsDefaultNames.Area, "exp( -0.306671 - 4.378177/t + 0.225725s - 3E-06n )")),
+                new KeyValuePair<string, MathExpression>("Casia", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 0.584018 - 9.960148/t + 0.294692s + 0.000274n )")),
+
+                new KeyValuePair<string, MathExpression>("Palo Volador", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -7.563575( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Palo Volador", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -7.563575( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Palo Volador", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.624014 - 10.108301/t + 0.030276s + 0.000414n )")),
+                new KeyValuePair<string, MathExpression>("Palo Volador", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.609769 - 20.178575/t + 0.060325s + 0.001922n )")),
+                new KeyValuePair<string, MathExpression>("Palo Volador", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 5.394304 - 23.23099/t + 0.128387s - 0.001331n )")),
+
+                new KeyValuePair<string, MathExpression>("Caoba", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -10.900122( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Caoba", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -10.900122( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Caoba", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.630349 - 10.089983/t + 0.075246s + 7.5E-05n )")),
+                new KeyValuePair<string, MathExpression>("Caoba", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 0.830452 - 20.722084/t + 0.164495s + 0.001994n )")),
+                new KeyValuePair<string, MathExpression>("Caoba", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 2.239672 - 32.894188/t + 0.260104s + 0.002181n )")),
+
+                new KeyValuePair<string, MathExpression>("Palo Blanco", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -3.617786( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Palo Blanco", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -3.617786( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Palo Blanco", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.663888 - 2.480653/t + 0.089199s - 0.000146n )")),
+                new KeyValuePair<string, MathExpression>("Palo Blanco", new MathExpression(MathExpressionsDefaultNames.Area, "exp( -0.668643 - 4.714003/t + 0.181244s + 0.00101n )")),
+                new KeyValuePair<string, MathExpression>("Palo Blanco", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 0.117821 - 8.184507/t + 0.271737s + 0.000896n )")),
+
+                new KeyValuePair<string, MathExpression>("Matilisguate", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -3.662898( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Matilisguate", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -3.662898( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Matilisguate", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 1.320543 - 4.009256/t + 0.158326s - 0.000237n )")),
+                new KeyValuePair<string, MathExpression>("Matilisguate", new MathExpression(MathExpressionsDefaultNames.Area, "exp( -1.422144 - 8.124784/t + 0.299527s + 0.001255n )")),
+                new KeyValuePair<string, MathExpression>("Matilisguate", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( -1.137584 - 12.265933/t + 0.4431s + 0.001109n )")),
+
+                new KeyValuePair<string, MathExpression>("Teca", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -3.891677( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Teca", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -3.891677( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Teca", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.293225 - 4.118555/t + 0.052407s - 0.000131n )")),
+                new KeyValuePair<string, MathExpression>("Teca", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 0.613447 - 7.899548/t + 0.09739s + 0.001207n )")),
+                new KeyValuePair<string, MathExpression>("Teca", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.605596 - 12.336335/t + 0.166684s + 0.001142n )")),
+
+                new KeyValuePair<string, MathExpression>("Pukté", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -1.741207( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pukté", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -1.741207( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Pukté", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 3.257189 - 3.956527/t + 0.009321s - 0n )")),
+                new KeyValuePair<string, MathExpression>("Pukté", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 3.695791 - 7.913055/t - 0.018641s - 0n )")),
+                new KeyValuePair<string, MathExpression>("Pukté", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 4.588308 - 10.377622/t + 0.049617s - 0n )")),
+
+                new KeyValuePair<string, MathExpression>("Guayabon", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -7.206822( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Guayabon", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -7.206822( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("Guayabon", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.537212 - 5.780087/t + 0.00923s + 0.00057n )")),
+                new KeyValuePair<string, MathExpression>("Guayabon", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.203433 - 11.513972/t + 0.018414s + 0.00251n )")),
+                new KeyValuePair<string, MathExpression>("Guayabon", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 3.066308 - 19.106921/t + 0.07381s + 0.002185n )")),
+
+                new KeyValuePair<string, MathExpression>("San Juan", new MathExpression(MathExpressionsDefaultNames.Height, "s exp( -8.904588( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("San Juan", new MathExpression(MathExpressionsDefaultNames.Site, "h exp( -8.904588( 1/t - .1 ) )")),
+                new KeyValuePair<string, MathExpression>("San Juan", new MathExpression(MathExpressionsDefaultNames.DAP, "exp( 2.769514 - 7.431654/t + 0.050203s - 4.3E-05n )")),
+                new KeyValuePair<string, MathExpression>("San Juan", new MathExpression(MathExpressionsDefaultNames.Area, "exp( 1.651327 - 15.314681/t + 0.099127s + 0.001388n )")),
+                new KeyValuePair<string, MathExpression>("San Juan", new MathExpression(MathExpressionsDefaultNames.Volume, "exp( 1.140516 - 32.901795/t + 0.275811s + 0.003415n )")),
+            };
+
+        }
+
     }
 }
