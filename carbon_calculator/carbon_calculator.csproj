@@ -235,6 +235,7 @@
     <Content Include="Scripts\calculator.js" />
     <Content Include="Scripts\Calculator\Math.js" />
     <Content Include="Scripts\Calculator\SpeciesCalculation.js" />
+    <Content Include="Scripts\Factories\SpeciesFactory.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />

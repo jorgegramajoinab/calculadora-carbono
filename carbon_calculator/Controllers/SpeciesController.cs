@@ -132,7 +132,15 @@ namespace carbon_calculator.Controllers
         {
             context.Configuration.LazyLoadingEnabled = false;
 
-            return Json(new { Content = await context.Species.Select(specie => specie.simpleName).ToListAsync() }, JsonRequestBehavior.AllowGet);
+            return Json(new {
+                Content = await context.Species.Select(
+                    specie => 
+                    new {
+                        specie.Id,
+                        specie.simpleName
+                    }).ToListAsync()
+            }
+            , JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
