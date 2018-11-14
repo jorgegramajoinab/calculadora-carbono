@@ -1,0 +1,48 @@
+﻿@model model.Models.MathExpression
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Eliminar</h2>
+
+<h3>¿Estas seguro de querer eliminar esta expresión matemática?</h3>
+<div>
+    <h4>@Html.DisplayFor(model => model.Name)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Código especie")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Species.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombres")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Expresión matemática")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expression)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Delete" class="btn btn-default" /> |
+        @Html.ActionLink("Regresar", "Details", "Species", new { id = Model.SpeciesId}, new { id = Model.SpeciesId })
+    </div>
+    }
+</div>
