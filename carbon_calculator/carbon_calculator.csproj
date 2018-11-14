@@ -202,6 +202,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\CalculatorController.cs" />
+    <Compile Include="Controllers\MathExpressionsController.cs" />
     <Compile Include="Controllers\SpeciesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -325,6 +326,11 @@
     <Content Include="Views\Species\Details.cshtml" />
     <Content Include="Views\Species\Edit.cshtml" />
     <Content Include="Views\Species\Index.cshtml" />
+    <Content Include="Views\MathExpressions\Create.cshtml" />
+    <Content Include="Views\MathExpressions\Delete.cshtml" />
+    <Content Include="Views\MathExpressions\Details.cshtml" />
+    <Content Include="Views\MathExpressions\Edit.cshtml" />
+    <Content Include="Views\MathExpressions\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
