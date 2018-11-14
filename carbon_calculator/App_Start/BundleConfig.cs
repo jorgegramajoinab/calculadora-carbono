@@ -27,7 +27,9 @@ namespace carbon_calculator
                       "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/calculator").Include(
-                      "~/Scripts/calculator.js"));
+                    "~/Scripts/utilities/utilities.js",
+                    "~/Scripts/Calculator/Math.js",      
+                    "~/Scripts/calculator.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
