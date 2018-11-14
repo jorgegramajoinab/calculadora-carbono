@@ -1,0 +1,74 @@
+﻿@model model.Models.Species
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h4>@Html.DisplayFor(model => model.commonName)</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Código");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre simple")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.simpleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre común")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.commonName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre científico")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.scientificName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Coeficiente de forma")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shapeCoefficient)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Límite de años")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.limitYear)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Materia seca")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dryMaterial)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Regresar al listado", "Index")
+</p>
