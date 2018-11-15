@@ -204,6 +204,7 @@
     <Compile Include="Controllers\CalculatorController.cs" />
     <Compile Include="Controllers\MathExpressionsController.cs" />
     <Compile Include="Controllers\SpeciesController.cs" />
+    <Compile Include="Controllers\SpeciesGroundIndexesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -236,6 +237,7 @@
     <Content Include="Scripts\Calculator\Math.js" />
     <Content Include="Scripts\Calculator\SpeciesCalculation.js" />
     <Content Include="Scripts\Factories\SpeciesFactory.js" />
+    <Content Include="Scripts\Factories\SpeciesGroundIndexesFactory.js" />
     <Content Include="Scripts\i18n\af.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />
@@ -303,6 +305,7 @@
     <Content Include="Scripts\select2.js" />
     <Content Include="Scripts\select2.min.js" />
     <Content Include="Scripts\Services\Species.js" />
+    <Content Include="Scripts\Services\SpeciesGroundIndexesService.js" />
     <Content Include="Scripts\utilities\utilities.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
@@ -332,6 +335,11 @@
     <Content Include="Views\MathExpressions\Details.cshtml" />
     <Content Include="Views\MathExpressions\Edit.cshtml" />
     <Content Include="Views\MathExpressions\Index.cshtml" />
+    <Content Include="Views\SpeciesGroundIndexes\Create.cshtml" />
+    <Content Include="Views\SpeciesGroundIndexes\Delete.cshtml" />
+    <Content Include="Views\SpeciesGroundIndexes\Details.cshtml" />
+    <Content Include="Views\SpeciesGroundIndexes\Edit.cshtml" />
+    <Content Include="Views\SpeciesGroundIndexes\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
