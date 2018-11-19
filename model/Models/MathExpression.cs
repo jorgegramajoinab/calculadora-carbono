@@ -16,9 +16,10 @@ namespace model.Models
 
         }
 
-        public MathExpression(string name, string expression)
+        public MathExpression(string key, string name, string expression)
         {
             this.Name = name;
+            this.Key = key;
             this.Expression = expression;
         }
 
@@ -27,6 +28,8 @@ namespace model.Models
 
         [ForeignKey(nameof(Species))]
         public int SpeciesId { get; set; }
+
+        public string Key { get; set; }
 
         public string Name { get; set; }
 

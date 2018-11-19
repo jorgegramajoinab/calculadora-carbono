@@ -28,7 +28,8 @@ namespace carbon_calculator
 
             bundles.Add(new ScriptBundle("~/bundles/calculator").Include(
                     "~/Scripts/utilities/utilities.js",
-                    "~/Scripts/Calculator/Math.js", 
+                    "~/Scripts/Calculator/Math.js",
+                    "~/Scripts/Calculator/SpeciesCalculation.js",
                     "~/Scripts/Services/Species.js",
                     "~/Scripts/Services/SpeciesGroundIndexesService.js",
                     "~/Scripts/Factories/SpeciesFactory.js",

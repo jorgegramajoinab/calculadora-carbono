@@ -2,8 +2,9 @@
 $(document).ready(function () {
     $(function () {
         let speciesFactory = new SpeciesFactory();
-        let speciesGrounIndexFactory = new SpeciesGroundIndexesFactory();
-        let selectedSpecie = null;
+        let speciesCalculation = new SpeciesCalculation();
+        //let speciesGrounIndexFactory = new SpeciesGroundIndexesFactory();
+        let currentSpecies = null;
 
         const SUMA_RALEOS = 100;
         const GRAPH_CARBON = 1;
@@ -179,7 +180,7 @@ $(document).ready(function () {
             var actTd = '';
             var finalTable = '<thead><tr>{0}</tr></thead><tbody><tr>{1}</tr></tbody>';
             for (var i = 0; i < data.length; i++) {
-                header += '<th style="text-align: center" nowrap>Año ' + i + '</th>';
+                header += '<th style="text-align: center" nowrap>Año ' + (i + 1) + '</th>';
                 content += '<td style="text-align: center">' + data[i] + '</td>';
             }
 
@@ -283,33 +284,6 @@ $(document).ready(function () {
             $('#nav-volumen').parent().removeClass('active');
         }
 
-        /**
-         * Función que hace llamada al controlador para obtener los índices de sitio de una especie específica
-         * @param {string} especie nombre de la especie
-         */
-        function getSiteIndex(especie) {
-            var url = $('#calc_proyeccion').data('url');
-
-            $.ajax({
-                url: urlIndices,
-                method: "POST",
-                data: {
-                    especie: especie
-                },
-                success: function (data) {
-                    var status = data.status;
-                    // Llamada correcta, muestra resultado
-                    if (status == 200) {
-                        $('#sel_sitio').html('');
-                        $('#sel_sitio').select2({ data: data.response });
-                    }
-                },
-                error: function (requestObject, error, errorThrown) {
-                    alert('Error al obtener índices de sitio');
-                }
-            });
-        }
-
         const init = () => {
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -384,6 +358,7 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_carbono));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_carbono));
+                        $('#dataType').html("<strong>Cantidades expresadas en m<sup>3</sup>/ha</strong>");
                     }
                     showGraph(datos_carbono, GRAPH_CARBON);
                 }
@@ -396,6 +371,7 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_altura));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_altura));
+                        $('#dataType').html("<strong>Cantidades expresadas en metros</strong>");
                     }
                     showGraph(datos_altura, GRAPH_HEIGHT);
                 }
@@ -408,6 +384,7 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_area));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_area));
+                        $('#dataType').html("<strong>Cantidades expresadas en m<sup>2</sup>/ha</strong>");
                     }
                     showGraph(datos_area, GRAPH_AREA);
                 }
@@ -420,6 +397,7 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_dap));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_dap));
+                        $('#dataType').html("<strong>Cantidades expresadas en centimetros</strong>");
                     }
                     showGraph(datos_dap, GRAPH_DAP);
                 }
@@ -432,6 +410,7 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_volumen));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_volumen));
+                        $('#dataType').html("<strong>Cantidades expresadas en m<sup>3</sup>/ha</strong>");
                     }
                     showGraph(datos_volumen, GRAPH_VOL);
                 }
@@ -444,25 +423,15 @@ $(document).ready(function () {
                 */
             $('#formCalculoActual').submit(function (event) {
                 event.preventDefault();
-                var formData = convertSerializedArray($(this).serializeArray());
-                let urlActual = $("#btnSubmitActual").data('postUrl');
 
-                $.ajax({
-                    url: urlActual,
-                    method: "POST",
-                    data: formData,
-                    success: function (data) {
-                        var status = data.status;
-                        // Llamada correcta, muestra resultado
-                        if (status == 200) {
-                            $('#panelResultadoActual').css('display', 'block');
-                            $('#lblResultado').html(data.response + " Unidades de Carbono");
-                        }
-                    },
-                    error: function (requestObject, error, errorThrown) {
-                        alert('Error en cálculo');
-                    }
-                });
+                var formData = convertSerializedArray($(this).serializeArray());
+
+                var result =
+                    speciesCalculation
+                        .calculateCarbon(speciesFactory.currentSpecies, formData.dap, formData.altura, formData.numArboles);
+
+                $('#panelResultadoActual').css('display', 'block');
+                $('#lblResultado').html(result.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " Unidades de Carbono");
             });
 
             /**
@@ -519,41 +488,27 @@ $(document).ready(function () {
 
                 // Verifica que la suma de raleos esté correcta
                 if (sumaRaleo <= SUMA_RALEOS) {
-
                     // Cantidad de árboles será igual a # árboles por hectarea * cantidad de hectareas
                     let contHectarea = formData['contHectarea'];
                     formData['numArboles'] = parseFloat(formData['numArboles']) * (contHectarea == '' ? 1 : contHectarea);
-                    console.log(formData);
-                    $.ajax({
-                        url: urlProyectado,
-                        method: "POST",
-                        data: formData,
-                        success: function (data) {
-                            var status = data.status;
-                            var values = data.response;
-                            // Llamada correcta, muestra resultado
-                            if (status == 200) {
-                                setNavValues(values);
-                                resetTabs();
+                    var years = parseInt($('#txtYearsP').val());
+                    var values =
+                        speciesCalculation.createProjections(speciesFactory.currentSpecies, years);
+                    setNavValues(values);
+                    resetTabs();
 
-                                $('#graph-result').data('values', values);
-                                $('#panelResultadoProyectado').css('display', 'block');
-                                $('#btnExportar').show();
-                                showGraph(values.carbono, GRAPH_CARBON);
+                    $('#graph-result').data('values', values);
+                    $('#panelResultadoProyectado').css('display', 'block');
+                    $('#btnExportar').show();
+                    showGraph(values.carbono, GRAPH_CARBON);
 
-                                // Si se usan raleos, utiliza diferente función para mostrar data
-                                if ($('#checkRaleo').prop('checked')) {
-                                    // Genera tabla HTML
-                                    $('#tablaProyectada').html(generateTableProjected(values.carbono));
-                                } else {
-                                    $('#tablaProyectada').html(generateTable(values.carbono));
-                                }
-                            }
-                        },
-                        error: function (requestObject, error, errorThrown) {
-                            alert('Error en cálculo');
-                        }
-                    });
+                    // Si se usan raleos, utiliza diferente función para mostrar data
+                    if ($('#checkRaleo').prop('checked')) {
+                        // Genera tabla HTML
+                        $('#tablaProyectada').html(generateTableProjected(values.carbono));
+                    } else {
+                        $('#tablaProyectada').html(generateTable(values.carbono));
+                    }
                 } else {
                     alert("La suma de los raleos debe ser menor o igual al 100%");
                 }
@@ -561,25 +516,44 @@ $(document).ready(function () {
 
             //Se obtiene el listado de especies del "speciesFactory" y 
             // establece ese listado en los dropdowns de la vista.
-            speciesFactory
-                .getSimpleNamesToDropdown()
-                .then(species => {
-                    $('#sel_especieP').select2({
+            speciesFactory.getSimpleNamesToDropdown().then(species => {
+                $('#sel_especieP')
+                    .select2({
                         data: species
-                    }).on('select2:select', function (e) {
-                        speciesGrounIndexFactory
-                            .getBySpecieId($(this).val())
-                            .then(data => $('#sel_sitio').select2({ data: data }));
+                    })
+                    .on('select2:select', function (e) {
 
-                        //getSiteIndex($(this).val());
+                        let id = $(this).val();
+
+                        speciesFactory.getById(id).then(species => {
+
+                            speciesFactory.currentSpecies = species;
+
+                            $('#sel_sitio').html('');
+
+                            $('#sel_sitio')
+                                .select2({ data: speciesFactory.currentSpecies.GroundIndexes })
+                                .on('select2:select', function (e) {
+                                    selectSpeciesSiteIndex($(this).val());
+                                });
+                        });
                     });
 
-                    $('#sel_especie').select2({
-                        data: species
-                    });
+                $('#sel_especie').select2({
+                    data: species
                 });
+
+            });
         }
 
+        const selectSpeciesSiteIndex = siteIndexId => {
+
+            var speciesGroundIndex =
+                speciesFactory.currentSpecies.GroundIndexes.find(sgi => sgi.id == siteIndexId);
+
+            speciesFactory.currentSpecies.currentSpeciesGroundIndex =
+                speciesGroundIndex;
+        }
 
         init();
 

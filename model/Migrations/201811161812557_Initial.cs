@@ -64,6 +64,7 @@ namespace model.Migrations
                     {
                         Id = c.Int(nullable: false, identity: true),
                         SpeciesId = c.Int(nullable: false),
+                        Key = c.String(),
                         Name = c.String(),
                         Expression = c.String(),
                     })
