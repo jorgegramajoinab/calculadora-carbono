@@ -10,7 +10,4 @@
                         .forEach(specie => result.push({ id: specie.Id, text: specie.simpleName }));
                     return result;
                 });
-
-    this.getById =
-        id => utilities.apiGet(urls.byId.replace('{speciesId}', id));
 }

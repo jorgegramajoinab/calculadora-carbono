@@ -9,5 +9,5 @@
         () => utilities.apiGet(urls.simpleNames).then();
 
     this.getById =
-        id => utilities.apiGet(urls.byId.replace('{speciesId}', id));
+        id => utilities.apiGet(urls.byId.replace('{speciesId}', id + ""));
 }

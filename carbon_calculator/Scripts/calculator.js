@@ -2,6 +2,7 @@
 $(document).ready(function () {
     $(function () {
         let speciesFactory = new SpeciesFactory();
+        let speciesGrounIndexFactory = new SpeciesGroundIndexesFactory();
         let selectedSpecie = null;
 
         const SUMA_RALEOS = 100;
@@ -566,7 +567,11 @@ $(document).ready(function () {
                     $('#sel_especieP').select2({
                         data: species
                     }).on('select2:select', function (e) {
-                         getSiteIndex($(this).val());
+                        speciesGrounIndexFactory
+                            .getBySpecieId($(this).val())
+                            .then(data => $('#sel_sitio').select2({ data: data }));
+
+                        //getSiteIndex($(this).val());
                     });
 
                     $('#sel_especie').select2({
@@ -577,9 +582,6 @@ $(document).ready(function () {
 
 
         init();
-
-        // Obtenemos indices de primer elemento
-        //getIndicesDeSitio(species[0]);
 
     });
 });
