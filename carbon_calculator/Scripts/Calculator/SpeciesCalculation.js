@@ -61,6 +61,26 @@
             return result;
         }
 
+    const createProjection =
+        (specie, year, number, expression, array) => {
+            /**variable that stores the result of the operation.*/
+            let result = 0;
+
+            /**Establishment of parameters.*/
+            parameters.t = year;
+
+            /**the mathematical expression is evaluated. */
+            result = math.eval(expression, parameters);
+
+            /**the result is approaching.*/
+            result = utilities.approximate(result);
+
+            /**the result is added to the array.*/
+            array.push(result);
+
+            return result;
+        }
+
     this.calculateCarbon =
         (specie, dap, height, number = 1) => {
             parameters.d = dap;
