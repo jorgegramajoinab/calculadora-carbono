@@ -428,7 +428,7 @@ $(document).ready(function () {
 
                 var result =
                     speciesCalculation
-                        .calculateCarbon(speciesFactory.currentSpecies, formData.dap, formData.altura, formData.numArboles);
+                        .calculateCarbon(speciesFactory.currentSpecies, formData.dap / 100, formData.altura, formData.numArboles);
 
                 $('#panelResultadoActual').css('display', 'block');
                 $('#lblResultado').html(result.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " Unidades de Carbono");
@@ -491,9 +491,10 @@ $(document).ready(function () {
                     // Cantidad de árboles será igual a # árboles por hectarea * cantidad de hectareas
                     let contHectarea = formData['contHectarea'];
                     formData['numArboles'] = parseFloat(formData['numArboles']) * (contHectarea == '' ? 1 : contHectarea);
-                    var years = parseInt($('#txtYearsP').val());
-                    var values =
-                        speciesCalculation.createProjections(speciesFactory.currentSpecies, years);
+                    let years = parseInt($('#txtYearsP').val());
+                    let number = parseInt($('#txtNum').val());
+                    let values =
+                        speciesCalculation.createProjections(speciesFactory.currentSpecies, years, number);
                     setNavValues(values);
                     resetTabs();
 
