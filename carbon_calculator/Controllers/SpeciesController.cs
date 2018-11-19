@@ -175,16 +175,29 @@ namespace carbon_calculator.Controllers
                    .Include(dbSpecie => dbSpecie.MathExpressions)
                    .FirstOrDefaultAsync(expression);
 
-            this.context.Entry(specie).State = EntityState.Detached;
-
             if (specie == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.NotFound, "Especie no encontrada.");
             }
 
-            //var mathExpressions = 
-            //    await context.GroundIndexes
-            //        .Where(dbMathExpressions => dbMathExpressions)
+            var speciesGroundIndexes = specie.GroundIndexes.ToList();
+            var mathExpressions = specie.MathExpressions.ToList();
+
+            this.context.Entry(specie).State = EntityState.Detached;
+            speciesGroundIndexes.ForEach(
+                specieGroundIndex =>
+                {
+                    var groundIndex = specieGroundIndex.GroundIndex;
+                    this.context.Entry(specieGroundIndex).State = EntityState.Detached;
+                    specieGroundIndex.GroundIndex = groundIndex;
+                }
+            );
+            mathExpressions.ForEach(
+                mathExpression => this.context.Entry(mathExpression).State = EntityState.Detached
+            );
+
+            specie.GroundIndexes = speciesGroundIndexes;
+            specie.MathExpressions = mathExpressions;
 
             return Json(new { Content = specie }, JsonRequestBehavior.AllowGet);
         }

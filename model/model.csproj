@@ -61,14 +61,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CarbonCalculatorModel.cs" />
-    <Compile Include="Migrations\201811061632296_Initial.cs" />
-    <Compile Include="Migrations\201811061632296_Initial.Designer.cs">
-      <DependentUpon>201811061632296_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\201811161812557_Initial.cs" />
+    <Compile Include="Migrations\201811161812557_Initial.Designer.cs">
+      <DependentUpon>201811161812557_Initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Configuration.cs" />
     <Compile Include="Models\DataContracts\Categories.cs" />
     <Compile Include="Models\DataContracts\MathExpressionsDefaultNames.cs" />
+    <Compile Include="Models\DataContracts\MathExpressionsKeys.cs" />
     <Compile Include="Models\DataContracts\Types.cs" />
     <Compile Include="Models\GroundIndex.cs" />
     <Compile Include="Models\MathExpression.cs" />
@@ -81,8 +82,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\201811061632296_Initial.resx">
-      <DependentUpon>201811061632296_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201811161812557_Initial.resx">
+      <DependentUpon>201811161812557_Initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
