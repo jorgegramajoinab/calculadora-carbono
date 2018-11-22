@@ -26,48 +26,49 @@
         vol: 0
     };
 
-    this.createProjections =
-        (specie, years, number = 1) => {
-            let result = {
-                carbono: [],
-                altura: [],
-                area: [],
-                dap: [],
-                volumen: [],
-            };
+    function Result() {
+        this.carbono = [];
+        this.altura = [];
+        this.area = [];
+        this.dap = [];
+        this.volumen = [];
+    }
 
-            console.log(specie);
+    const getMathExpressions =
+        specie => {
+            let heightExpression =
+                specie.MathExpressions
+                    .find(mathExp => mathExp.Key == "height")
+                    .Expression;
+            let dapExpression =
+                specie.MathExpressions
+                    .find(mathExp => mathExp.Key == "dap")
+                    .Expression;
+            let areaExpression =
+                specie.MathExpressions
+                    .find(mathExp => mathExp.Key == "area")
+                    .Expression;
+            let volumeExpression =
+                specie.MathExpressions
+                    .find(mathExp => mathExp.Key == "volume")
+                    .Expression;
 
-            parameters.t = years;
-            parameters.n = number;
-            parameters.s = specie.currentSpeciesGroundIndex.value;
-            parameters.ff = specie.shapeCoefficient;
-            parameters.ms = specie.dryMaterial;
-
-            let heightExpression = specie.MathExpressions.find(mathExpression => mathExpression.Key == "height");
-            let dapExpression = specie.MathExpressions.find(mathExpression => mathExpression.Key == "dap");
-            let areaExpression = specie.MathExpressions.find(mathExpression => mathExpression.Key == "area");
-            let volumeExpression = specie.MathExpressions.find(mathExpression => mathExpression.Key == "volume");
-
-            for (var i = 1; i < years + 1; i++) {
-                parameters.t = i;
-                result.altura.push(utilities.approximate(parameters.h = math.eval(heightExpression.Expression, parameters)));
-                result.area.push(utilities.approximate(math.eval(areaExpression.Expression, parameters)));
-                result.dap.push(utilities.approximate(parameters.d = math.eval(dapExpression.Expression, parameters)));
-                result.volumen.push(utilities.approximate(parameters.vol = math.eval(volumeExpression.Expression, parameters)));
-                result.carbono.push(utilities.approximate(math.eval(projectedCarbonPExpression, parameters)));
+            return {
+                heightExpression: heightExpression,
+                dapExpression: dapExpression,
+                areaExpression: areaExpression,
+                volumeExpression: volumeExpression
             }
-
-            return result;
         }
 
     const createProjection =
-        (specie, year, number, expression, array) => {
+        (year, number, expression, array) => {
             /**variable that stores the result of the operation.*/
             let result = 0;
 
             /**Establishment of parameters.*/
             parameters.t = year;
+            parameters.n = number;
 
             /**the mathematical expression is evaluated. */
             result = math.eval(expression, parameters);
@@ -76,11 +77,78 @@
             result = utilities.approximate(result);
 
             /**the result is added to the array.*/
-            array.push(result);
+            array.push([year, result]);
 
             return result;
         }
 
+    const setSpecieParameters =
+        specie => {
+            parameters.s = specie.currentSpeciesGroundIndex.value;
+            parameters.ff = specie.shapeCoefficient;
+            parameters.ms = specie.dryMaterial;
+        }
+
+    this.createProjectionsWhitRaleos =
+        (specie, raleos, years, number = 1) => {
+            let result = new Result();
+
+            raleos.forEach(raleo => console.log("AR: ", raleo));
+
+            setSpecieParameters(specie);
+
+            let mathExpressions =
+                getMathExpressions(specie);
+
+            for (var year = 0; year < years; year++) {
+                createProjection(year, number, mathExpressions.heightExpression, result.altura);
+                createProjection(year, number, mathExpressions.areaExpression, result.area);
+                createProjection(year, number, mathExpressions.dapExpression, result.dap);
+                parameters.vol = createProjection(year, number, mathExpressions.volumeExpression, result.volumen);
+                createProjection(year, number, projectedCarbonPExpression, result.carbono);
+
+                if (utilities.elementsInArray(raleos)) {
+                    let index = raleos.findIndex(raleo => raleo.year == year);
+                    let raleo = raleos[index];
+
+                    if (raleo != null) {
+                        raleos.splice(index, 1);
+                        number *= raleo.percent;
+                        year--;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+    this.createProjections =
+        (specie, years, number = 1) => {
+            let result = new Result();
+            
+            setSpecieParameters(specie);
+
+            let mathExpressions =
+                getMathExpressions(specie);
+
+            for (var year = 1; year < years + 1; year++) {
+                createProjection(year, number, mathExpressions.heightExpression, result.altura);
+                createProjection(year, number, mathExpressions.areaExpression, result.area);
+                createProjection(year, number, mathExpressions.dapExpression, result.dap);
+                parameters.vol = createProjection(year, number, mathExpressions.volumeExpression, result.volumen);
+                createProjection(year, number, projectedCarbonPExpression, result.carbono);
+            }
+
+            return result;
+        }
+
+    /**
+     * Function to calculate the current carbon.
+     * @param {any} specie Plant type
+     * @param {number} dap Diameter at breast height.
+     * @param {number} height Average height.
+     * @param {number} number (Density) Number of trees per hectare.
+     */
     this.calculateCarbon =
         (specie, dap, height, number = 1) => {
             parameters.d = dap;

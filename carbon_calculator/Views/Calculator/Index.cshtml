@@ -124,8 +124,7 @@
 
                         <button id="btnSubmitActual" 
                                 type="submit" 
-                                class="btn btn-primary" 
-                                data-post-url="@Url.Action("calculoActual", "Calculator")">
+                                class="btn btn-primary">
                             Calcular
                         </button>
                         <button id="btnResetFormActual" 
@@ -302,74 +301,44 @@
                         <div class="panel panel-info panel-raleo" 
                              hidden>
 
-                            <div class="panel-body" 
+                            <div class="panel-body"
                                  style="padding-bottom: 10px;">
 
-                                <div class="row input-upper-margin">
+                                <p class="raleo-info-top">
+                                    Para agregar un nuevo raleo presione el botón
+                                    "Agregar", para eliminar el último raleo 
+                                    agregado presione el botón "Eliminar".
+                                </p>
 
-                                    <div class="col-md-3">
-
-                                        <label for="sel_raleo1">
-                                            Año primer raleo
-                                        </label>
-                                        <select id="sel_raleo1" 
-                                                class="form-control big-input-size"
-                                                name="sel_raleo1">
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                        <label for="pct1">
-                                            % primer raleo
-                                        </label>
-                                        <input id="pct1"
-                                               name="pct1"
-                                               type="number" 
-                                               class="form-control big-input-size"
-                                               placeholder="15" 
-                                               min="0" 
-                                               max="50" 
-                                               step="any"
-                                               autocomplete="off"
-                                               oninvalid="this.setCustomValidity('Ingresar un % válido')" 
-                                               oninput="setCustomValidity('')">
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                        <label for="sel_raleo2">
-                                            Año segundo raleo
-                                        </label>
-                                        <select id="sel_raleo2"
-                                                class="form-control big-input-size"
-                                                name="sel_raleo2">
-                                        </select>
-
-                                    </div>
-
-                                    <div class="col-md-3">
-
-                                        <label for="pct2">
-                                            % segundo raleo
-                                        </label>
-                                        <input id="pct2" 
-                                               name="pct2" 
-                                               type="number" 
-                                               class="form-control big-input-size"
-                                               placeholder="10"
-                                               min="0" 
-                                               max="50" 
-                                               step="any"
-                                               autocomplete="off"
-                                               oninvalid="this.setCustomValidity('Ingresar un % válido')"
-                                               oninput="setCustomValidity('')">
-                                    </div>
-
+                                <!--Div utilizado para ubicar y contener los 
+                                    campos de ingreso de raleos que son ingresados
+                                    dinámicamente.-->
+                                <div id="tblRaleos"
+                                     name="tblRaleos"
+                                     class="row input-upper-margin">
                                 </div>
 
-                                <p class="raleo-info">El porcentaje total no puede exceder del 100%</p>
+                                <div class="col-md-12 raleo-buttons">
+                                    <button id="btnAgregarRaleo" 
+                                            name="btnAgregarRaleo"
+                                            type="button"
+                                            class="btn btn-success">
+                                        <span class="glyphicon glyphicon-plus"></span>
+                                        Agregar
+                                    </button>
+                                    <button id="btnEliminarRaleo" 
+                                            name="btnEliminarRaleo" 
+                                            type="button"
+                                            class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-minus"></span>
+                                        Eliminar
+                                    </button>
+                                </div>
+
+                                <p class="raleo-info">
+                                    El porcentaje de cada uno de los raleos
+                                    no puede exceder el 100%
+                                </p>
 
                             </div>
                         </div>
@@ -392,8 +361,7 @@
 
                             <button id="btnSubmitProyectado" 
                                     type="submit"
-                                    class="btn btn-primary" 
-                                    data-post-url="@Url.Action("calculoProyectado", "Calculator")">
+                                    class="btn btn-primary">
                                 Calcular
                             </button>
 

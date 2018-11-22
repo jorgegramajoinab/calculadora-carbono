@@ -3,8 +3,13 @@ $(document).ready(function () {
     $(function () {
         let speciesFactory = new SpeciesFactory();
         let speciesCalculation = new SpeciesCalculation();
-        //let speciesGrounIndexFactory = new SpeciesGroundIndexesFactory();
         let currentSpecies = null;
+        let raleosControl = {
+            /** number of raleos.*/
+            number: 0,
+            /** Years of raleos.*/
+            years: 0
+        };
 
         const SUMA_RALEOS = 100;
         const GRAPH_CARBON = 1;
@@ -20,10 +25,6 @@ $(document).ready(function () {
             datos_altura;
 
         var chart;
-
-        let urlProyectado = $("#btnSubmitProyectado").data('postUrl');
-        let urlIndices = $('#calc_proyeccion').data('url');
-        let uriActual = $("#btnSubmitActual").data('postUrl');
 
         String.prototype.format = function () {
             var formatted = this;
@@ -55,6 +56,7 @@ $(document).ready(function () {
             * param {int} graph: ID de gráfica a mostrar
             */
         function showGraph(values, graph) {
+            console.log(values);
             // Si ya existe la gráfica, solo modifica datos, color y titulo
             if (typeof chart != "undefined") {
                 chart.series[0].setData(values);
@@ -181,7 +183,7 @@ $(document).ready(function () {
             var finalTable = '<thead><tr>{0}</tr></thead><tbody><tr>{1}</tr></tbody>';
             for (var i = 0; i < data.length; i++) {
                 header += '<th style="text-align: center" nowrap>Año ' + (i + 1) + '</th>';
-                content += '<td style="text-align: center">' + data[i] + '</td>';
+                content += '<td style="text-align: center">' + data[i][1] + '</td>';
             }
 
             return finalTable.format(header, content);
@@ -210,8 +212,8 @@ $(document).ready(function () {
                 }
                 actData[actYear].push(data[i][1]);
             }
-            actData.forEach(function (element, index, array) {
-                header += '<th style="text-align: center" nowrap>Año ' + index + '</th>';
+            actData.forEach((element, index) => {
+                header += '<th style="text-align: center" nowrap>Año ' + (index + 1) + '</th>';
                 content += '<td style="text-align: center">' + element.toString() + '</td>';
             });
 
@@ -220,12 +222,9 @@ $(document).ready(function () {
 
         /**
             * Función que agrega <option> a Select de años de raleo, según la cantidad ingresada en input
-            * param {int} years: cantidad de años
+            * @param {int} years cantidad de años
             */
         function addYearsSelects(years) {
-
-            $('#sel_raleo1').find('option').remove();
-            $('#sel_raleo2').find('option').remove();
 
             var firstYear = (new Date()).getFullYear();
             var lastYear = firstYear + years;
@@ -235,19 +234,18 @@ $(document).ready(function () {
                 text: "Sin Raleo"
             }));
 
-            var count_years = 1;
+            var count_years = 0;
             // Agrega <option> según cantidad de años
-            for (var i = firstYear; i < lastYear; i++) {
-                $('#sel_raleo1').append($('<option>', {
-                    value: count_years,
-                    text: i.toString()
-                }));
-                $('#sel_raleo2').append($('<option>', {
-                    value: count_years,
-                    text: i.toString()
-                }));
-
-                count_years++;
+            for (var j = 0; j < raleosControl.number; j++) {
+                $('#selRaleo' + j).find('option').remove();
+                for (var i = firstYear; i < lastYear; i++) {
+                    $('#selRaleo' + j).append($('<option>', {
+                        value: count_years,
+                        text: i.toString()
+                    }));
+                    count_years++;
+                }
+                count_years = 0;
             }
         }
 
@@ -284,6 +282,83 @@ $(document).ready(function () {
             $('#nav-volumen').parent().removeClass('active');
         }
 
+        /**
+         * Function to add inputs to projections that use raleos.
+         */
+        const addInputsRaleo = e => {
+            if (raleosControl.number >= raleosControl.years) {
+                return;
+            }
+
+            //Creación de nodos a insertar.
+            var firstDivNode = document.createElement('div');
+            var firstLavelNode = document.createElement('label');
+            var selectNode = document.createElement('select');
+            var secondDivNode = document.createElement('div');
+            var secondLavelNode = document.createElement('label');
+            var inputNode = document.createElement('input');
+
+            //Establecimiento de atributos de los nodos a insertar.
+            firstDivNode.setAttribute('id', 'div1Raleo' + raleosControl.number);
+            firstDivNode.setAttribute('class', 'col-md-3');
+            selectNode.setAttribute('id', 'selRaleo' + raleosControl.number);
+            selectNode.setAttribute('name', 'selRaleo' + raleosControl.number);
+            selectNode.setAttribute('class', 'form-control big-input-size');
+            secondDivNode.setAttribute('id', 'div2Raleo' + raleosControl.number);
+            secondDivNode.setAttribute('class', 'col-md-3');
+            inputNode.setAttribute('id', 'inpRaleo' + raleosControl.number);
+            inputNode.setAttribute('name', 'inpRaleo' + raleosControl.number);
+            inputNode.setAttribute('type', 'number');
+            inputNode.setAttribute('class', 'form-control big-input-size');
+            inputNode.setAttribute('placeholder', '15');
+            inputNode.setAttribute('min', '0');
+            inputNode.setAttribute('max', '50');
+            inputNode.setAttribute('step', 'any');
+            inputNode.setAttribute('autocomplete', 'off');
+            inputNode.setAttribute('oninvalid', 'this.setCustomValidity(\'Ingresar un % válido\')"');
+            inputNode.setAttribute('oninput', 'setCustomValidity(\'\')');
+
+            //Inserción del texto a mostran en los nodos lavel
+            firstLavelNode.innerHTML = 'Año raleo ' + (raleosControl.number + 1);
+            secondLavelNode.innerHTML = 'Porcentaje raleo ' + (raleosControl.number + 1);
+
+            //Armado de la estructura de nodos.
+            firstDivNode.appendChild(firstLavelNode);
+            firstDivNode.appendChild(selectNode);
+            secondDivNode.appendChild(secondLavelNode);
+            secondDivNode.appendChild(inputNode);
+
+            //Agregados los nodos al DOM
+            document.getElementById("tblRaleos").appendChild(firstDivNode);
+            document.getElementById("tblRaleos").appendChild(secondDivNode);
+
+            //Aumento de la variable encargada de controlar el conteo de raleos.
+            raleosControl.number++;
+
+            addYearsSelects(raleosControl.years);
+        }
+
+        /**
+         * Function to remove inputs to projections that use raleos.
+         */
+        const removeInputsRaleo = e => {
+            if (raleosControl.number <= 0) {
+                return;
+            }
+
+            //Busqueda del parde y los hijos a eliminar.
+            var parent = document.getElementById("tblRaleos");
+            var child1 = document.getElementById("div1Raleo" + (raleosControl.number - 1));
+            var child2 = document.getElementById("div2Raleo" + (raleosControl.number - 1));
+
+            //Eliminación de los hijos.
+            parent.removeChild(child1);
+            parent.removeChild(child2);
+
+            //Disminución de la variable encargada de controlar el conteo de raleos.
+            raleosControl.number--;
+        }
+
         const init = () => {
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -317,7 +392,7 @@ $(document).ready(function () {
                     $('#checkRaleo').prop('disabled', false);
                     $('#lblCheckRaleo').css('color', "black");
                     // Llena Select con años
-                    addYearsSelects(parseInt(newVal));
+                    addYearsSelects(raleosControl.years = parseInt(newVal));
                 } else {
                     // Si lo deja Empty y el checkbox esta seleccionado, le hace uncheck y oculta panel
                     if ($('#checkRaleo').prop('checked')) {
@@ -439,79 +514,49 @@ $(document).ready(function () {
                 * Se hace Submit de la form via AJAX, y así obtener el resultado y luego
                 * mostrarlo en el panel de resultado
                 */
-            $('#formCalculoProyectado').submit(function (event) {
+            $('#btnSubmitProyectado').click(event => {
                 event.preventDefault();
-                var formData = convertSerializedArray($(this).serializeArray());
-                var sumaRaleo = 0;
 
-                // Si el año de los raleos es distinto, sí lo toma en cuenta.
-                if (formData.sel_raleo1 !== formData.sel_raleo2) {
+                let years = parseInt($('#txtYearsP').val());
+                let number = parseInt($('#txtNum').val());
+                let values = [];
 
-                    var raleo = {};
-                    // Si la opción de raleos está seleccionada, obtiene sus valores
-                    if ($('#checkRaleo').prop('checked')) {
+                // Si la opción de raleos está seleccionada, obtiene sus valores
+                if ($('#checkRaleo').prop('checked')) {
+                    let raleos = [];
 
-                        if (formData.pct1 > 0 && formData.pct1 <= 50) {
-
-                            raleo[formData.sel_raleo1] = formData.pct1;
-                            // Si sí hay raleo, agrega propiedad a objeto
-                            if (formData.sel_raleo2 !== "0") {
-
-                                if (formData.pct2 > 0 && formData.pct2 <= 50) {
-
-                                    raleo[formData.sel_raleo2] = formData.pct2;
-                                    sumaRaleo = parseInt(raleo[formData.sel_raleo1]) + parseInt(raleo[formData.sel_raleo2]);
-                                }
-                                else {
-                                    alert("Raleos deben ser menor o igual a 50%");
-                                }
-
-                            } else
-                                sumaRaleo = parseInt(raleo[formData.sel_raleo1]);
-                        }
-                        else {
-                            alert("Raleos deben ser menor o igual a 50%");
-                        }
+                    for (var i = 0; i < raleosControl.number; i++) {
+                        let year = parseInt($('#selRaleo' + i).val());
+                        let percent = parseInt($('#inpRaleo' + i).val());
+                        raleos.push({ year: year, percent: 1 - (percent / 100) });
                     }
 
-                    // Elimina campos de raleo del Form
-                    delete formData['pct1'];
-                    delete formData['pct2'];
-                    delete formData['sel_raleo1'];
-                    delete formData['sel_raleo2'];
+                    raleos.sort(a => a.year);
 
-                    // Agrega objeto de raleo a campos del Form
-                    formData['raleo'] = JSON.stringify(raleo);
+                    values =
+                        speciesCalculation
+                            .createProjectionsWhitRaleos(speciesFactory.currentSpecies, raleos, years, number);
                 } else {
-                    alert('Debe seleccionar años diferentes');
+                    values =
+                        speciesCalculation
+                            .createProjections(speciesFactory.currentSpecies, years, number);
                 }
 
-                // Verifica que la suma de raleos esté correcta
-                if (sumaRaleo <= SUMA_RALEOS) {
-                    // Cantidad de árboles será igual a # árboles por hectarea * cantidad de hectareas
-                    let contHectarea = formData['contHectarea'];
-                    formData['numArboles'] = parseFloat(formData['numArboles']) * (contHectarea == '' ? 1 : contHectarea);
-                    let years = parseInt($('#txtYearsP').val());
-                    let number = parseInt($('#txtNum').val());
-                    let values =
-                        speciesCalculation.createProjections(speciesFactory.currentSpecies, years, number);
-                    setNavValues(values);
-                    resetTabs();
+                setNavValues(values);
 
-                    $('#graph-result').data('values', values);
-                    $('#panelResultadoProyectado').css('display', 'block');
-                    $('#btnExportar').show();
-                    showGraph(values.carbono, GRAPH_CARBON);
+                resetTabs();
 
-                    // Si se usan raleos, utiliza diferente función para mostrar data
-                    if ($('#checkRaleo').prop('checked')) {
-                        // Genera tabla HTML
-                        $('#tablaProyectada').html(generateTableProjected(values.carbono));
-                    } else {
-                        $('#tablaProyectada').html(generateTable(values.carbono));
-                    }
+                $('#graph-result').data('values', values);
+                $('#panelResultadoProyectado').css('display', 'block');
+                $('#btnExportar').show();
+                showGraph(values.carbono, GRAPH_CARBON);
+
+                // Si se usan raleos, utiliza diferente función para mostrar data
+                if ($('#checkRaleo').prop('checked')) {
+                    // Genera tabla HTML
+                    $('#tablaProyectada').html(generateTableProjected(values.carbono));
                 } else {
-                    alert("La suma de los raleos debe ser menor o igual al 100%");
+                    $('#tablaProyectada').html(generateTable(values.carbono));
                 }
             });
 
@@ -545,6 +590,10 @@ $(document).ready(function () {
                 });
 
             });
+
+            document.getElementById("btnAgregarRaleo").onclick = addInputsRaleo;
+
+            document.getElementById("btnEliminarRaleo").onclick = removeInputsRaleo;
         }
 
         const selectSpeciesSiteIndex = siteIndexId => {
