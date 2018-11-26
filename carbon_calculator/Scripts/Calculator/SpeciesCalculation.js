@@ -107,13 +107,17 @@
                 parameters.vol = createProjection(year, number, mathExpressions.volumeExpression, result.volumen);
                 createProjection(year, number, projectedCarbonPExpression, result.carbono);
 
+                console.log('Num 1: ', number);
+
                 if (utilities.elementsInArray(raleos)) {
                     let index = raleos.findIndex(raleo => raleo.year == year);
                     let raleo = raleos[index];
 
                     if (raleo != null) {
                         raleos.splice(index, 1);
-                        number *= raleo.percent;
+                        console.log('Num 2 : ', number);
+                        console.log('Raleo: ', raleo.percent);
+                        console.log('Producto: ', number *= raleo.percent);
                         year--;
                     }
                 }

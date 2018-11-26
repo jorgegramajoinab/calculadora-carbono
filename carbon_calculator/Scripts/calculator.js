@@ -56,7 +56,6 @@ $(document).ready(function () {
             * param {int} graph: ID de gráfica a mostrar
             */
         function showGraph(values, graph) {
-            console.log(values);
             // Si ya existe la gráfica, solo modifica datos, color y titulo
             if (typeof chart != "undefined") {
                 chart.series[0].setData(values);
@@ -182,7 +181,7 @@ $(document).ready(function () {
             var actTd = '';
             var finalTable = '<thead><tr>{0}</tr></thead><tbody><tr>{1}</tr></tbody>';
             for (var i = 0; i < data.length; i++) {
-                header += '<th style="text-align: center" nowrap>Año ' + (i + 1) + '</th>';
+                header += '<th style="text-align: center" nowrap>Año ' + i + '</th>';
                 content += '<td style="text-align: center">' + data[i][1] + '</td>';
             }
 
@@ -213,8 +212,8 @@ $(document).ready(function () {
                 actData[actYear].push(data[i][1]);
             }
             actData.forEach((element, index) => {
-                header += '<th style="text-align: center" nowrap>Año ' + (index + 1) + '</th>';
-                content += '<td style="text-align: center">' + element.toString() + '</td>';
+                header += '<th style="text-align: center" nowrap>Año ' + index + '</th>';
+                content += '<td style="text-align: center">' + element.join(' | ') + '</td>';
             });
 
             return finalTable.format(header, content);
@@ -225,27 +224,24 @@ $(document).ready(function () {
             * @param {int} years cantidad de años
             */
         function addYearsSelects(years) {
+            for (var i = 0; i < raleosControl.number; i++) {
+                addYearsSelect(years, '#selRaleo' + i);
+            }
+        }
 
-            var firstYear = (new Date()).getFullYear();
-            var lastYear = firstYear + years;
+        function addYearsSelect(years, component) {
+            let firstYear = (new Date()).getFullYear();
+            let lastYear = firstYear + years;
+            let count_years = 0;
 
-            $('#sel_raleo2').append($('<option>', {
-                value: 0,
-                text: "Sin Raleo"
-            }));
-
-            var count_years = 0;
-            // Agrega <option> según cantidad de años
-            for (var j = 0; j < raleosControl.number; j++) {
-                $('#selRaleo' + j).find('option').remove();
-                for (var i = firstYear; i < lastYear; i++) {
-                    $('#selRaleo' + j).append($('<option>', {
-                        value: count_years,
-                        text: i.toString()
-                    }));
-                    count_years++;
-                }
-                count_years = 0;
+            $(component).find('option').remove();
+            for (var i = firstYear; i < lastYear; i++) {
+                // Agrega <option> según cantidad de años
+                $(component).append($('<option>', {
+                    value: count_years,
+                    text: i.toString()
+                }));
+                count_years++;
             }
         }
 
@@ -290,13 +286,19 @@ $(document).ready(function () {
                 return;
             }
 
+            let currentYear = (new Date()).getFullYear();
+
             //Creación de nodos a insertar.
-            var firstDivNode = document.createElement('div');
-            var firstLavelNode = document.createElement('label');
-            var selectNode = document.createElement('select');
-            var secondDivNode = document.createElement('div');
-            var secondLavelNode = document.createElement('label');
-            var inputNode = document.createElement('input');
+            let firstDivNode = document.createElement('div');
+            let firstLavelNode = document.createElement('label');
+            let selectNode = document.createElement('select');
+            let secondDivNode = document.createElement('div');
+            let secondLavelNode = document.createElement('label');
+            let inputNode = document.createElement('input');
+            let options = [];
+            for (var i = 0; i < raleosControl.years; i++) {
+                options.push(document.createElement('option'));
+            }
 
             //Establecimiento de atributos de los nodos a insertar.
             firstDivNode.setAttribute('id', 'div1Raleo' + raleosControl.number);
@@ -317,25 +319,27 @@ $(document).ready(function () {
             inputNode.setAttribute('autocomplete', 'off');
             inputNode.setAttribute('oninvalid', 'this.setCustomValidity(\'Ingresar un % válido\')"');
             inputNode.setAttribute('oninput', 'setCustomValidity(\'\')');
+            options.forEach((option, index) => option.setAttribute('value', index));
 
             //Inserción del texto a mostran en los nodos lavel
             firstLavelNode.innerHTML = 'Año raleo ' + (raleosControl.number + 1);
             secondLavelNode.innerHTML = 'Porcentaje raleo ' + (raleosControl.number + 1);
+            options.forEach((option, index) => option.innerHTML = currentYear + index);
+
 
             //Armado de la estructura de nodos.
             firstDivNode.appendChild(firstLavelNode);
             firstDivNode.appendChild(selectNode);
             secondDivNode.appendChild(secondLavelNode);
             secondDivNode.appendChild(inputNode);
+            options.forEach(option => selectNode.appendChild(option));
 
-            //Agregados los nodos al DOM
+            //Agregados los nodos al DOM.
             document.getElementById("tblRaleos").appendChild(firstDivNode);
             document.getElementById("tblRaleos").appendChild(secondDivNode);
 
             //Aumento de la variable encargada de controlar el conteo de raleos.
             raleosControl.number++;
-
-            addYearsSelects(raleosControl.years);
         }
 
         /**
@@ -413,17 +417,6 @@ $(document).ready(function () {
 
                 // Inicialmente este año no es obligatorio
                 $('#pct2').prop('required', false);
-            });
-
-            // Cambio del Combobox de Año raleo 2
-            $("#sel_raleo2").change(function () {
-                // Si selecciona "Sin Raleo", limpia campo del %
-                if ($("#sel_raleo2").val() === "0") {
-                    $('#pct2').val('');
-                    $('#pct2').prop('required', false);
-                } else {
-                    $('#pct2').prop('required', true);
-                }
             });
 
             // Muestra gráfica y tabla de carbono al volver esta Tab como Actual
@@ -563,6 +556,12 @@ $(document).ready(function () {
             //Se obtiene el listado de especies del "speciesFactory" y 
             // establece ese listado en los dropdowns de la vista.
             speciesFactory.getSimpleNamesToDropdown().then(species => {
+
+                let option = document.createElement('option');
+                option.setAttribute('value', 0);
+                option.innerHTML = 'Seleccione una opción.';
+                document.getElementById("sel_especieP").appendChild(option);
+
                 $('#sel_especieP')
                     .select2({
                         data: species
@@ -571,18 +570,25 @@ $(document).ready(function () {
 
                         let id = $(this).val();
 
+                        if (id == 0) {
+                            return;
+                        }
+
                         speciesFactory.getById(id).then(species => {
 
                             speciesFactory.currentSpecies = species;
 
                             $('#sel_sitio').html('');
-
                             $('#sel_sitio')
                                 .select2({ data: speciesFactory.currentSpecies.GroundIndexes })
                                 .on('select2:select', function (e) {
                                     selectSpeciesSiteIndex($(this).val());
                                 });
-                        });
+                        }).then(() =>
+                            $('#sel_sitio')
+                                .val(speciesFactory.currentSpecies.currentSpeciesGroundIndex.value + '')
+                                .prop('selected', true)
+                        );
                     });
 
                 $('#sel_especie').select2({

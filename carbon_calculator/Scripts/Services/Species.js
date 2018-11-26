@@ -5,7 +5,7 @@
         byId: '/Species/byId?id={speciesId}'
     }
 
-    this.getSimpleNames =
+    this.getAll =
         () => utilities.apiGet(urls.simpleNames).then();
 
     this.getById =
