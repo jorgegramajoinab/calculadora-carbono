@@ -16,6 +16,12 @@ namespace carbon_calculator.Controllers
     public class SpeciesController : Controller
     {
         private CarbonCalculatorModel context = new CarbonCalculatorModel();
+
+        public SpeciesController()
+        {
+
+        }
+
         #region view controller
         public async Task<ActionResult> Index()
         {
@@ -130,17 +136,41 @@ namespace carbon_calculator.Controllers
         [HttpGet]
         public async Task<ActionResult> allSimpleNames()
         {
-            context.Configuration.LazyLoadingEnabled = false;
+            this.context.Configuration.LazyLoadingEnabled = false;
+            this.context.Configuration.ProxyCreationEnabled = false;
 
-            return Json(new {
-                Content = await context.Species.Select(
-                    specie => 
-                    new {
-                        specie.Id,
-                        specie.simpleName
-                    }).ToListAsync()
-            }
-            , JsonRequestBehavior.AllowGet);
+            var species =
+                await context.Species
+                    .Include(dbSpecies => dbSpecies.GroundIndexes)
+                    .Include(dbSpecies => dbSpecies.GroundIndexes.Select(specieGI => specieGI.GroundIndex))
+                    .Include(dbSpecies => dbSpecies.MathExpressions)
+                    .ToListAsync();
+
+            species.ForEach(specie =>
+            {
+                var speciesGroundIndexes = specie.GroundIndexes.ToList();
+                var mathExpressions = specie.MathExpressions.ToList();
+
+                this.context.Entry(specie).State = EntityState.Detached;
+                speciesGroundIndexes.ForEach(
+                    specieGroundIndex =>
+                    {
+                        var groundIndex = specieGroundIndex.GroundIndex;
+                        this.context.Entry(specieGroundIndex).State = EntityState.Detached;
+                        specieGroundIndex.GroundIndex = groundIndex;
+                    }
+                );
+                mathExpressions.ForEach(
+                    mathExpression => this.context.Entry(mathExpression).State = EntityState.Detached
+                );
+
+                specie.GroundIndexes = speciesGroundIndexes;
+                specie.MathExpressions = mathExpressions;
+
+                this.context.Entry(specie).State = EntityState.Detached;
+            });
+
+            return Json(new { Content = species }, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

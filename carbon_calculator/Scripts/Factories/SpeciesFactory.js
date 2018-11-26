@@ -4,37 +4,58 @@
 
 
     this.currentSpecies = null;
+    this.savedSpecies = null;
+
+
+    const setDefaultSiteIndex =
+        specie => {
+            if (utilities.elementsInArray(specie.GroundIndexes)) {
+                specie.currentSpeciesGroundIndex = specie.GroundIndexes[0];
+            } else {
+                return;
+            }
+
+            specie.GroundIndexes.forEach(specieGroundIndex =>
+                specieGroundIndex.text =
+                specieGroundIndex.GroundIndex.name + '(' +
+                specieGroundIndex.value + 'm)'
+            );
+        }
 
     this.getSimpleNamesToDropdown =
         () => 
-            species.getSimpleNames().then(data => {
+            species.getAll().then(data => {
                 var result = [];
-                data.Content.forEach(specie =>
-                    result.push({ id: specie.Id, text: specie.simpleName })
-                );
 
-                if (utilities.elementsInArray(result)) {
-                    return this.getById(result[0].id)
-                        .then(data => this.currentSpecies = data)
-                        .then(() => result);
-                } else {
-                    return result;
+                if (this.savedSpecies === null) {
+                    this.savedSpecies = data.Content;
                 }
+
+                this.currentSpecies = this.savedSpecies[0];
+
+
+                this.savedSpecies.forEach(specie => {
+                    setDefaultSiteIndex(specie);
+                    result.push({ id: specie.Id, text: specie.simpleName });
+                });
+
+                return result;
             });
 
     this.getById =
-        id => species.getById(id).then(result => {
-            var specie = result.Content;
-            specie.GroundIndexes.forEach(specieGroundIndex => 
-                specieGroundIndex.text =
-                    specieGroundIndex.GroundIndex.name + '(' +
-                    specieGroundIndex.value + 'm)'
-            );
+        async id => {
+            if (this.savedSpecies != null) {
+                let specie = this.savedSpecies.find(dbSpecie => dbSpecie.Id == id);
 
-            if (utilities.elementsInArray(specie.GroundIndexes)) {
-                specie.currentSpeciesGroundIndex = specie.GroundIndexes[0];
+                if (specie != null) {
+                    return specie;
+                }
             }
 
-            return specie;
-        });
+            await species.getById(id).then(result => {
+                let specie = result.Content;
+                setDefaultSiteIndex(specie);
+                return specie;
+            })
+        };
 }
