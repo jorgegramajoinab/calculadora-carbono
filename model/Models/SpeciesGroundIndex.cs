@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -39,6 +40,7 @@ namespace model.Models
 
         public double value { get; set; }
 
+        [JsonIgnore]
         [InverseProperty(nameof(Models.Species.GroundIndexes))]
         public Species Species { get; set; }
 

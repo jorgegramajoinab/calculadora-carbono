@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -35,6 +36,7 @@ namespace model.Models
 
         public string Expression { get; set; }
 
+        [JsonIgnore]
         [InverseProperty(nameof(Models.Species.MathExpressions))]
         public Species Species { get; set; }
     }
