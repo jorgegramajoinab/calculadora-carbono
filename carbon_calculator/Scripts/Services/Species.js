@@ -1,8 +1,8 @@
 ﻿function SpeciesService() {
     var utilities = new Utilities();
     const urls = {
-        simpleNames: '/Species/allSimpleNames',
-        byId: '/Species/byId?id={speciesId}'
+        simpleNames: '/api/Species/all',
+        byId: '/api/Species?id={speciesId}'
     }
 
     this.getAll =
