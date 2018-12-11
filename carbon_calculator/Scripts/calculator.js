@@ -513,13 +513,22 @@ $(document).ready(function () {
 
                 var formData = convertSerializedArray($(this).serializeArray());
 
-                var result =
+                let actualCarbon =
                     speciesCalculation
                         .calculateCarbon(speciesFactory.currentSpecies, formData.dap / 100, formData.altura, formData.numArboles);
+                let actualCO2
+                    = speciesCalculation
+                        .co2(speciesFactory.currentSpecies, formData.dap / 100, formData.altura, formData.numArboles);
 
                 $('#panelResultadoActual').css('display', 'block');
-                $('#lblResultado').html(result.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
-                    " Toneladas de carbono por hectarea (tC/ha)");
+                $('#lblResultado')
+                    .html(
+                        "<strong>" + 
+                        actualCarbon.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+                        "</strong> toneladas de carbono por hectarea (t C/ha) equivalentes a <strong>" +
+                        actualCO2.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+                        "</strong> Toneladas de CO<sub>2</sub> fijados del ambiente."
+                    );
                 //Toneladas de CO2 por hectarea fijados del ambiente.
             });
 
