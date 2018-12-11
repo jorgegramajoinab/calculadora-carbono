@@ -17,8 +17,10 @@ $(document).ready(function () {
         const GRAPH_DAP = 3;
         const GRAPH_HEIGHT = 4;
         const GRAPH_VOL = 5;
+        const GRAPH_CO2 = 6;
 
-        var datos_carbono,
+        var datos_co2,
+            datos_carbono,
             datos_area,
             datos_dap,
             datos_volumen,
@@ -144,6 +146,7 @@ $(document).ready(function () {
         function getGraphMeasure(graph) {
             switch (graph) {
                 case GRAPH_CARBON: return "Unidades de carbono";
+                case GRAPH_CO2: return "Unidades de co2";
                 case GRAPH_AREA: return "Área Basal (m²/ha)";
                 case GRAPH_DAP: return "DAP (cm)";
                 case GRAPH_HEIGHT: return "Altura dominante (m)";
@@ -163,6 +166,7 @@ $(document).ready(function () {
                 case GRAPH_DAP: return "#EF9A9A";
                 case GRAPH_HEIGHT: return "#80CBC4";
                 case GRAPH_VOL: return "#BDBDBD";
+                case GRAPH_CO2: return "#BDF8BD";
                 default: return "#546E7A";
             }
         }
@@ -260,6 +264,7 @@ $(document).ready(function () {
             * param {array} values: array con resultados
             */
         function setNavValues(values) {
+            datos_co2 = values.co2.slice(0);
             datos_carbono = values.carbono.slice(0);
             datos_altura = values.altura.slice(0);
             datos_area = values.area.slice(0);
@@ -272,6 +277,7 @@ $(document).ready(function () {
             */
         function resetTabs() {
             $('#nav-carbono').parent().addClass('active');
+            $('#nav-co2').parent().removeClass('active');
             $('#nav-area').parent().removeClass('active');
             $('#nav-altura').parent().removeClass('active');
             $('#nav-dap').parent().removeClass('active');
@@ -426,9 +432,22 @@ $(document).ready(function () {
                         $('#tablaProyectada').html(generateTableProjected(datos_carbono));
                     } else {
                         $('#tablaProyectada').html(generateTable(datos_carbono));
-                        $('#dataType').html("<strong>Cantidades expresadas en m<sup>3</sup>/ha</strong>");
+                        $('#dataType').html("<strong>Cantidades expresadas en toneladas de carbono por hectarea (t C/ha)</strong>");
                     }
                     showGraph(datos_carbono, GRAPH_CARBON);
+                }
+            });
+
+            // Muestra gráfica y tabla de co2 al volver esta Tab como Actual
+            $('#nav-co2').on('click', function () {
+                if (!$(this).parent().hasClass('active')) {
+                    if ($('#checkRaleo').prop('checked')) {
+                        $('#tablaProyectada').html(generateTableProjected(datos_co2));
+                    } else {
+                        $('#tablaProyectada').html(generateTable(datos_co2));
+                        $('#dataType').html("<strong>Cantidades expresadas en toneladas de CO2 por hectarea (t CO<sub>2</sub>/ha)</strong>");
+                    }
+                    showGraph(datos_co2, GRAPH_CO2);
                 }
             });
 
@@ -499,7 +518,9 @@ $(document).ready(function () {
                         .calculateCarbon(speciesFactory.currentSpecies, formData.dap / 100, formData.altura, formData.numArboles);
 
                 $('#panelResultadoActual').css('display', 'block');
-                $('#lblResultado').html(result.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') + " Unidades de Carbono");
+                $('#lblResultado').html(result.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') +
+                    " Toneladas de carbono por hectarea (tC/ha)");
+                //Toneladas de CO2 por hectarea fijados del ambiente.
             });
 
             /**
