@@ -50,7 +50,7 @@
 
                             <label for="#txtDAP"
                                    style="display: block">
-                                DAP (cm)
+                                DAP Promedio (cm)
                                 <img src="~/Content/images/help.png"
                                      class="icon-help pull-right"
                                      data-toggle="tooltip"
@@ -387,6 +387,9 @@
                 <li class="active">
                     <a data-toggle="tab" id="nav-carbono">Carbono</a>
                 </li>
+                <li class="active">
+                    <a data-toggle="tab" id="nav-co2">Dióxido de Carbono (CO<sub>2</sub>)</a>
+                </li>
                 <li>
                     <a data-toggle="tab" id="nav-dap">DAP</a>
                 </li>
@@ -411,11 +414,11 @@
                              class="row"
                              style="margin: 5px; text-align:center;">
                             <div style="overflow-x: auto">
-                                <div id="dataType" align="left">
-                                    <strong>Cantidades expresadas en m<sup>3</sup>/ha</strong>
-                                </div>
                                 <table id="tablaProyectada"
                                        class="table table-bordered"></table>
+                            </div>
+                            <div id="dataType" align="right">
+                                <strong>Cantidades expresadas en toneladas de carbono (tC/ha) </strong>
                             </div>
                         </div>
                         @using (Html.BeginForm("export", "Calculator", FormMethod.Post, new { id = "formExport" }))

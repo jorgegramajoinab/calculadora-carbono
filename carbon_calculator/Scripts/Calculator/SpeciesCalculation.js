@@ -1,6 +1,7 @@
 ﻿function SpeciesCalculation() {
     let carbonExpression = "(pi/4)(d^2)n*h*ff*ms*pc*feb";
     let projectedCarbonPExpression = "vol*ms*pc*feb";
+    let projectedCO2Expression = "co*" + projectedCarbonPExpression;
     let utilities = new Utilities();
 
     let parameters = {
@@ -23,10 +24,13 @@
         /**Factor de extención de biomasa. */
         feb: 1.6,
         /**Volumen */
-        vol: 0
+        vol: 0,
+        /** Proporción de co2*/
+        co: 3.66
     };
 
     function Result() {
+        this.co2 = [];
         this.carbono = [];
         this.altura = [];
         this.area = [];
@@ -106,6 +110,7 @@
                 createProjection(year, number, mathExpressions.dapExpression, result.dap);
                 parameters.vol = createProjection(year, number, mathExpressions.volumeExpression, result.volumen);
                 createProjection(year, number, projectedCarbonPExpression, result.carbono);
+                createProjection(year, number, projectedCO2Expression, result.co2);
 
                 console.log('Num 1: ', number);
 
@@ -141,6 +146,7 @@
                 createProjection(year, number, mathExpressions.dapExpression, result.dap);
                 parameters.vol = createProjection(year, number, mathExpressions.volumeExpression, result.volumen);
                 createProjection(year, number, projectedCarbonPExpression, result.carbono);
+                createProjection(year, number, projectedCO2Expression, result.co2);
             }
 
             return result;
@@ -162,6 +168,24 @@
             parameters.ms = specie.dryMaterial;
 
             return utilities.approximate(math.eval(carbonExpression, parameters));
+        }
+
+    /**
+     * Function to calculate the current CO2.
+     * @param {any} specie Plant type
+     * @param {number} dap Diameter at breast height.
+     * @param {number} height Average height.
+     * @param {number} number (Density) Number of trees per hectare.
+     */
+    this.co2 =
+        (specie, dap, height, number = 1) => {
+            parameters.d = dap;
+            parameters.n = number;
+            parameters.h = height
+            parameters.ff = specie.shapeCoefficient;
+            parameters.ms = specie.dryMaterial;
+
+            return utilities.approximate(math.eval(co2Expression, parameters));
         }
 
 }
