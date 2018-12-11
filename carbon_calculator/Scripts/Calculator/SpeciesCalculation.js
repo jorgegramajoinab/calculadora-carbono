@@ -1,5 +1,6 @@
 ﻿function SpeciesCalculation() {
     let carbonExpression = "(pi/4)(d^2)n*h*ff*ms*pc*feb";
+    let co2Expression = "co*" + carbonExpression;
     let projectedCarbonPExpression = "vol*ms*pc*feb";
     let projectedCO2Expression = "co*" + projectedCarbonPExpression;
     let utilities = new Utilities();
