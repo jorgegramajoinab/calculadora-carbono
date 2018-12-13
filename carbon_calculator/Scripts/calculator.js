@@ -2,6 +2,7 @@
 $(document).ready(function () {
     $(function () {
         let speciesFactory = new SpeciesFactory();
+        let excelService = new ExcelService();
         let speciesCalculation = new SpeciesCalculation();
         let currentSpecies = null;
         let raleosControl = {
@@ -27,6 +28,8 @@ $(document).ready(function () {
             datos_altura;
 
         var chart;
+
+        let projections = [];
 
         String.prototype.format = function () {
             var formatted = this;
@@ -542,7 +545,6 @@ $(document).ready(function () {
 
                 let years = parseInt($('#txtYearsP').val());
                 let number = parseInt($('#txtNum').val());
-                let values = [];
 
                 // Si la opción de raleos está seleccionada, obtiene sus valores
                 if ($('#checkRaleo').prop('checked')) {
@@ -556,31 +558,44 @@ $(document).ready(function () {
 
                     raleos.sort(a => a.year);
 
-                    values =
+                    projections =
                         speciesCalculation
                             .createProjectionsWhitRaleos(speciesFactory.currentSpecies, raleos, years, number);
                 } else {
-                    values =
+                    projections =
                         speciesCalculation
                             .createProjections(speciesFactory.currentSpecies, years, number);
                 }
 
-                setNavValues(values);
+                setNavValues(projections);
 
                 resetTabs();
 
-                $('#graph-result').data('values', values);
+                $('#graph-result').data('values', projections);
                 $('#panelResultadoProyectado').css('display', 'block');
                 $('#btnExportar').show();
-                showGraph(values.carbono, GRAPH_CARBON);
+                showGraph(projections.carbono, GRAPH_CARBON);
 
                 // Si se usan raleos, utiliza diferente función para mostrar data
                 if ($('#checkRaleo').prop('checked')) {
                     // Genera tabla HTML
-                    $('#tablaProyectada').html(generateTableProjected(values.carbono));
+                    $('#tablaProyectada').html(generateTableProjected(projections.carbono));
                 } else {
-                    $('#tablaProyectada').html(generateTable(values.carbono));
+                    $('#tablaProyectada').html(generateTable(projections.carbono));
                 }
+            });
+
+            $('#btnExportar').click(event => {
+                event.preventDefault();
+
+                console.log('Hi');
+
+                excelService
+                    .getExcel({
+                        specie: speciesFactory.currentSpecies,
+                        projections: projections,
+                        groundIndex: speciesFactory.currentSpecies.currentSpeciesGroundIndex,
+                    });
             });
 
             //Se obtiene el listado de especies del "speciesFactory" y 

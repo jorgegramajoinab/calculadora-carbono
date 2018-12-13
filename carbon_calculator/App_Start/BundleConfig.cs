@@ -30,6 +30,7 @@ namespace carbon_calculator
                     "~/Scripts/utilities/utilities.js",
                     "~/Scripts/Calculator/Math.js",
                     "~/Scripts/Calculator/SpeciesCalculation.js",
+                    "~/Scripts/Services/excelService.js",
                     "~/Scripts/Services/Species.js",
                     "~/Scripts/Services/SpeciesGroundIndexesService.js",
                     "~/Scripts/Factories/SpeciesFactory.js",

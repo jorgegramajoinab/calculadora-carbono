@@ -1,7 +1,12 @@
 ﻿function Utilities() {
     this.apiGet = url => $.ajax(url).then();
 
-    this.apiPost = (url, data) => $.ajax(url).then();
+    this.apiPost = (url, data) => $.ajax({
+        url: url,
+        type: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(data)
+    });
 
     this.approximate =
         (number, decimals = 3) => {

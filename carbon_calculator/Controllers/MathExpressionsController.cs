@@ -88,7 +88,14 @@ namespace carbon_calculator.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(mathExpression).State = EntityState.Modified;
+                var dbMathExpression = 
+                    await db.MathExpressions
+                        .FirstOrDefaultAsync(me => me.Id == mathExpression.Id);
+
+                dbMathExpression.Expression = mathExpression.Expression;
+                dbMathExpression.Name = mathExpression.Name;
+
+                db.Entry(dbMathExpression).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
