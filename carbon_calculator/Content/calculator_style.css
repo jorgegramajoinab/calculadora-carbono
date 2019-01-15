@@ -54,6 +54,19 @@ input[type=number] {
     color: #3a87ad;
 }
 
+.raleo-info-top {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    font-size: 10px;
+    text-align: left;
+    color: #3a87ad;
+}
+
+.raleo-buttons {
+    margin-top: 15px;
+    text-align: right;
+}
+
 .graph-picker {
     position: absolute;
     top: 50%;

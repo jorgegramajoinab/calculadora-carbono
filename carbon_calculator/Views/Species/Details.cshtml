@@ -1,0 +1,108 @@
+﻿@model model.Models.Species
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <div class="col-md-12">
+        <div class="col-md-8">
+            <h4>@Html.DisplayFor(model => model.commonName)</h4>
+        </div>
+        <div class="col-md-4" align="right">
+            @Html.ActionLink("Editar", "Edit", new { id = Model.Id }) |
+            @Html.ActionLink("Regresar al listado", "Index")
+        </div>
+    </div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Código");
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre simple")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.simpleName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre común")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.commonName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Nombre científico")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.scientificName)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Coeficiente de forma")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.shapeCoefficient)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Límite de años")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.limitYear)
+        </dd>
+
+        <dt>
+            @Html.DisplayName("Materia seca")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dryMaterial)
+        </dd>
+    </dl>
+    <hr />
+    <h4>Modelos de crecimiento</h4>
+    <hr />
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Expresión matemática</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.MathExpressions)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(mathExp => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(mathExp => item.Expression)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Editar", "Edit", "MathExpressions", new { id = item.Id }, new { id = item.Id }) |
+                        @Html.ActionLink("Detalles", "Details", "MathExpressions", new { id = item.Id }, new { id = item.Id }) |
+                        @Html.ActionLink("Eliminar", "Delete", "MathExpressions", new { id = item.Id }, new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

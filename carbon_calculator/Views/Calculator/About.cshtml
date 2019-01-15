@@ -10,11 +10,339 @@
     <div class="panel-body">
         <div id="readme" class="readme blob instapaper_body">
             <article class="markdown-body entry-content" itemprop="text">
+
+                <h2>
+                    <a id="user-content-calculo-de-carbono-presente"
+                       class="anchor"
+                       aria-hidden="true"
+                       href="#calculo-de-carbono-presente">
+                        <svg aria-hidden="true"
+                             class="octicon octicon-link"
+                             height="16"
+                             version="1.1"
+                             viewBox="0 0 16 16"
+                             width="16">
+                            <path fill-rule="evenodd"
+                                  d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+                            </path>
+                        </svg>
+                    </a>
+                    CARBONO ACTUAL EN LA BIOMASA AÉREA DE BOSQUES NATURALES
+                    (PRIMARIOS Y SECUNDARIOS) Y DE PLANTACIONES FORESTALES
+                </h2>
+                <p>
+                    Es una herramienta que permite estimar el contenido de
+                    carbono en la biomasa por encima del suelo para 28
+                    especies en plantaciones forestales mediante métodos y
+                    parámetros de uso internacional y mediante la utilización
+                    de variables dasométricas representativas de cada sitio”,
+                    derivado del seguimiento de dinámica de crecimiento de las
+                    plantaciones forestales a nivel nacional. La metodología
+                    se divide en dos procesos fundamentales, el primero
+                    consiste en el cálculo del volumen maderable y el segundo
+                    en el cálculo de carbono en la biomasa aérea, tal como se
+                    describe a continuación:
+                </p>
+
+                <h3>
+                    1.	EXPLICACIÓN DEL CÁLCULO DE VOLUMEN MADERABLE PROPUESTO
+                </h3>
+                <p>
+                    Primero se realiza el cálculo del área basal en dada una
+                    de las unidades muestrales (cada árbol). El área basal
+                    (AB) es la sumatoria de las áreas tansversales de todos
+                    los árboles existentes en el área definida (hectárea) a
+                    una altura de 1.30 metros sobre el suelo y se espresa
+                    m<sup>2</sup>/ha; la fórmula para calcularla es la
+                    siguiente:
+                </p>
+                <p>
+                    $$AB = (0.7854)*DAP^2*N$$
+                </p>
+                Donde:
+                <table class="table table-responsive">
+                    <tr>
+                        <th width="20%">
+                            AB
+                        </th>
+                        <td width="80%">
+                            Área basal expresada en
+                            metros cuadrados por hectárea (m<sup>2</sup>/ha).
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            0.7854
+                        </th>
+                        <td>
+                            Valor constante,
+                            equivalente a  &pi; / 4.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            DAP
+                        </th>
+                        <td>
+                            (Diámetro a la altura del pecho) medido a 1.30m
+                            por encima de la base del árbol, se utiliza el
+                            valor promedio expresado en metros.
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            N
+                        </th>
+                        <td>
+                            Representa el número promedio de árboles por una
+                            hectárea del proyecto.
+                        </td>
+                    </tr>
+                </table>
+                <p>
+                    Posterior al cálculo del área basal (AB) se procede a
+                    utilizar la fórmula de volumen mediante la utilización del
+                    valor de la altura total promedio de la plantación, el
+                    valor de parea basal y un coeficiente de forma (relación
+                    entre el volumen real y el volumen aparente de un árbol) de
+                    la manera siguiente:
+                </p>
+                <p>
+                    $$Vol. Total = AB * ALTURA * F.F.$$
+                </p>
+                Donde:
+                <div class="col-sm-12">
+                    <table class="table table-responsive">
+                        <tr with="100%">
+                            <th width="20%">
+                                Vol. Total
+                            </th>
+                            <td width="80%">
+                                Volumen total expresado en metros cúbicos por
+                                hectárea (m<sup>3</sup>/ha).
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                AB
+                            </th>
+                            <td>
+                                Área basal expresada en
+                                metros cuadrados por hectárea (m<sup>2</sup>/ha)</td>
+                        </tr>
+                        <tr>
+                            <th>
+                                ALTURA
+                            </th>
+                            <td>
+                                Se considera la altura toral del árbol
+                                expresada en metros.
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>
+                                F.F.
+                            </th>
+                            <td>
+                                Factor de forma constante (0.5) para la
+                                especie seleccionada.
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <h3>
+                    2.	CÁLCULO DEL CONTENIDO DE CARBONO EN LA BIOMASA AÉREA
+                </h3>
+                <p>
+                    Una vez, habiendo obtenido el valor del volumen total por
+                    hectárea (Vol., m<sup>3</sup>/ha), se procede a calcular el
+                    contenido de carbono, que es el producto del volumen
+                    multiplicado por el contenido de materia seca (% MS, se
+                    consideró 50%) y por el contenido de carbono (C) en la
+                    metería seca (MS) (%C = 50% aceptado por el IPCC), tal como
+                    se detalla a continuación:
+                </p>
+                <p>
+                    $$Carbono = Vol. {m^3 \over ha} * 0.5 * 0.5 $$
+                </p>
+                <p>
+                    A la cantidad resultante de “C” se aplica el factor de
+                    extensión de la biomasa (FEB) igual a 1.6 considerando un
+                    60% adicional de contenido en ramas y follaje (en la
+                    literatura este factor se menciona con rango entre el 60%
+                    y el 90%) y la cifra total se multiplica por el área total
+                    de la reforestación.
+                </p>
+                <p>
+                    $$Carbono = Vol. {m^3 \over ha} * 0.5 * 0.5 * 1.6$$
+                </p>
+
+                <h2>
+                    <a id="user-content-calculo-de-carbono-presente"
+                       class="anchor"
+                       aria-hidden="true"
+                       href="#calculo-de-carbono-presente">
+                        <svg aria-hidden="true"
+                             class="octicon octicon-link"
+                             height="16"
+                             version="1.1"
+                             viewBox="0 0 16 16"
+                             width="16">
+                            <path fill-rule="evenodd"
+                                  d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+                            </path>
+                        </svg>
+                    </a>
+                    CARBONO PROYECTADO EN LA BIOMASA AÉREA DE BOSQUES NATURALES
+                    (PRIMARIOS Y SECUNDARIOS) Y DE PLANTACIONES FORESTALES
+                </h2>
+                <p>
+                    El principio es el mismo que el utilizado en el cálculo de
+                    carbono actúa, con relación al cálculo del contenido de
+                    carbono el la biomasa aérea; la variante del cálculo
+                    proyectado reside en la forma en la cual se calcula el
+                    volumen, ya que en este caso se realiza utilizando los
+                    modelos de predicción generados en el documento “Dinámica
+                    de crecimiento y productividad de 28 especies forestales
+                    en Guatemala”, a continuación, un ejemplo de la familia de
+                    ecuaciones de predicción para la especie Melina
+                    (Gmelina arborea), donde se utiliza la ecuación para el
+                    cálculo de volumen, sustituyendo T (edad proyectada de la
+                    plantación) y N (número de árboles por hectárea), y el
+                    sitio automáticamente reconoce el valor del rango
+                    seleccionado en el campo anterior; el volumen es
+                    representado en m^3/ha.
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Variable</th>
+                            <th>Modelo de crecimiento</th>
+                            <th>$$R^2$$</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th width="30%">Altura dominante (m)</th>
+                            <td width="55%">
+                                $e^{(\ln(S) - 0.684405({1 \over T} - 0.1))}$
+                            </td>
+                            <td width="15%">0.67</td>
+                        </tr>
+                        <tr>
+                            <th>Diámetro (cm)</th>
+                            <td>
+                                $e^{(2.762289 - {2.32964 \over T} + 0.014772 * S - 0.000567 * N)}$
+                            </td>
+                            <td>0.98</td>
+                        </tr>
+                        <tr>
+                            <th>Área basal (m<sup>2</sup>/ha)</th>
+                            <td>
+                                $e^{(2.143734 - {4.666703 \over T} + 0.028075 * S - 0.000276 * N)}$
+                            </td>
+                            <td>0.97</td>
+                        </tr>
+                        <tr>
+                            <th>Volumen total (m<sup>3</sup>/ha)</th>
+                            <td>
+                                $e^{(1.966696 - {6.206873 \over T} + 0.119088 * S - 0.000292 * N)}$
+                            </td>
+                            <td>0.99</td>
+                        </tr>
+                        <tr>
+                            <th>Índice de sitio</th>
+                            <td>
+                                $e^{(\ln(H) + 0.684405 *( { 1 \over T } - 0.1 ))}$
+                            </td>
+                            <td>0.67</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>
+                    <small>
+                        *** Todas las ecuaciones de las especies se encuentran
+                        disponibles en la sección "Descargas importantes"
+                    </small>
+                </p>
+                <p>
+                    El cálculo del contenido de carbono en la biomasa aérea se
+                    hace después de haber obtenido el valor del volumen total
+                    por hectárea (m^3/ha), procediendo a calcular el contenido
+                    de carbono, que es el producto del volumen multiplicado por
+                    el contenido de materia seca(%MS, se consideró 50%) y por
+                    el contenido de carbono (C) en la materia seca
+                    (MS) (%C = 50% aceptado el IPCC), tal como se detalla a
+                    continuación:
+                </p>
+                <p>
+                    $$Carbono = Vol. {m^3 \over ha} * 0.5 * 0.5 $$
+                </p>
+                <p>
+                    A la cantidad resultante de “C” se aplica el factor de
+                    extensión de la biomasa (FEB) igual a 1.6 considerando un
+                    60% adicional de contenido en ramas y follaje (en la
+                    literatura este factor se menciona con rango entre el 60%
+                    y el 90%) y la cifra total se multiplica por el área total
+                    de la reforestación.
+                </p>
+                <p>
+                    $$Carbono = Vol. {m^3 \over ha} * 0.5 * 0.5 * 1.6$$
+                </p>
+                <p>
+                    Para conocer la fuente original de los cálculos, se 
+                    recomienda explorar el siguiente vinculo que despliega el
+                    documento denominado 
+                    <a href="https://es.scribd.com/doc/29369907/Guia-Practica-de-Medicion-de-Carbono-en-la-Biomasa-Forestal">
+                        “Guía práctica para la medición de lacaptura de Carbono
+                        en la Biomasa forestal”.
+                    </a>
+                </p>
+                <p>
+                    Así mismo, se recomienda visitar el vínculo donde se
+                    encuentra disponible el documento generado por el
+                    IPCC -Panel Intergubernamental sobre el Cambio Climático-
+                    donde disponen las directrices para los inventarios
+                    nacionales de gases de efecto invernadero en tierras
+                    forestales:
+                </p>
+                <p>
+                    https://www.ipccnggip.iges.or.jp/public/2006gl/spanish/pdf/4_Volume4/v4_04_Ch4_Forest_Land.pdf
+                </p>
+
+
+            </article>
+        </div>
+    </div>
+    <!--
+
+    <div class="panel-body">
+        <div id="readme" class="readme blob instapaper_body">
+            <article class="markdown-body entry-content" itemprop="text">
                 <p>
                     El
                     Detalle del procedimiento para realizar la medicion de captura de carbono en la biomasa forestal.
                 </p>
-                <h2><a href="#calculo-de-carbono-presente" aria-hidden="true" class="anchor" id="user-content-calculo-de-carbono-presente"><svg aria-hidden="true" class="octicon octicon-link" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Calculo de carbono presente</h2>
+                <h2>
+                    <a id="user-content-calculo-de-carbono-presente"
+                       class="anchor" 
+                       aria-hidden="true" 
+                       href="#calculo-de-carbono-presente">
+                        <svg aria-hidden="true" 
+                             class="octicon octicon-link" 
+                             height="16" 
+                             version="1.1" 
+                             viewBox="0 0 16 16" 
+                             width="16">
+                            <path fill-rule="evenodd" 
+                                  d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+                            </path>
+                        </svg>
+                    </a>
+                    Calculo de carbono presente
+                </h2>
+
                 <p>El calculo se divide en dos pasos simples:</p>
                 <ul>
                     <li>Calculo de volumen maderable</li>
@@ -54,5 +382,7 @@
             </article>
         </div>
     </div>
+
+    -->
 </div>
 

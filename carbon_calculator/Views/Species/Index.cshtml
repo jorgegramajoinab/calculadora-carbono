@@ -1,0 +1,69 @@
+﻿@model IEnumerable<model.Models.Species>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Listado de especies</h2>
+
+<p>
+    @Html.ActionLink("Crear nuevo", "Create")
+</p>
+<table class="table table-hover">
+    <tr>
+        <th>
+            @Html.DisplayName("Código");
+        </th>
+        <th>
+            @Html.DisplayName("Nombre simple")
+        </th>
+        <th>
+            @Html.DisplayName("Nombre común")
+        </th>
+        <th>
+            @Html.DisplayName("Nombre científico")
+        </th>
+        <th>
+            @Html.DisplayName("Coeficiente de forma")
+        </th>
+        <th>
+            @Html.DisplayName("Límite de años")
+        </th>
+        <th>
+            @Html.DisplayName("Materia seca")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.code)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.simpleName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.commonName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.scientificName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.shapeCoefficient)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.limitYear)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.dryMaterial)
+        </td>
+        <td>
+            @Html.ActionLink("Editar", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Detalles", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Eliminar", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

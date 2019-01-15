@@ -1,0 +1,28 @@
+﻿@model model.Models.MathExpression
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalles</h2>
+
+<div>
+    <h4>
+        Expreción matemática: @Html.DisplayFor(model => model.Species.commonName): @Html.DisplayFor(model => model.Name)
+    </h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayName("Expreción matemática")
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Expression)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.Id })|
+    @Html.ActionLink("Regresar", "Details", "Species", new { id = Model.SpeciesId }, new { id = Model.SpeciesId })
+</p>

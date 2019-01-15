@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>@ViewBag.Title Calculadora de carbono</title>
     <script src="https://code.highcharts.com/highcharts.src.js"></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js?config=TeX-MML-AM_CHTML'></script>
     @Styles.Render("~/Content/css")
@@ -21,6 +21,7 @@
         <div class="container">
             <div class="navbar-header">
                 @Html.ActionLink("Calculadora", "index", "Calculator", new { area = "" }, new { @class = "navbar-brand navbar-main" })
+                @Html.ActionLink("Especies", "index", "Species", new { area = "" }, new { @class = "navbar-brand" })
                 @Html.ActionLink("Acerca de", "about", "Calculator", new { area = "" }, new { @class = "navbar-brand" })
             </div>
         </div>
@@ -28,6 +29,27 @@
     <div class="container body-content">
         <div class="page-header">
             <h1>Calculadora de carbono <small>Plantaciones forestales</small></h1>
+            <h5  align="justify">
+                <small>
+                    La Dirección de Desarrollo Forestal por medio del Departamento
+                    de Investigación Forestal y con el apoyo de LEDS - Desarrollo
+                    con bajas emisiones en Guatemala – ponen a disposición del
+                    sector forestal la “CALCULADORA DE CARBONO”, que constituye 
+                    una herramienta que utiliza métodos y parámetros de uso 
+                    internacional para estimar el contenido de carbono por encima
+                    del suelo para parámetros de uso internacional para estimar 
+                    el contenido de carbono por encima del suelo para 28 especies,
+                    a partir del seguimiento de la dinámica de crecimiento de 
+                    plantaciones forestales en base a parcelas permanentes de 
+                    medición forestal -PPMF- establecidas a nivel nacional; se 
+                    objetivo es promover el cálculo de carbono como una variable
+                    más en la mensura forestal y así mismo , el empoderamiento 
+                    de temas relacionados al cambio climático. Para el cálculo 
+                    real del contenido de carbono con fines de comercialización
+                    a mercados de carbono, deberá seguir los estándares requeridos 
+                    por entidades competentes para alcanzar un mayor nivel de precisión.
+                </small>
+            </h5>
         </div>
         @RenderBody()
 

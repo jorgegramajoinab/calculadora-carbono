@@ -1,0 +1,42 @@
+﻿@model model.Models.SpeciesGroundIndex
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>SpeciesGroundIndex</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.GroundIndex.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GroundIndex.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Species.code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Species.code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.value)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.value)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
